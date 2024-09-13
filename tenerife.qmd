@@ -82,7 +82,7 @@ Les dades tracten sobre lleres de l'illa de Tenerife. Les variables que es conte
 
 -   **cauce_orden**: de tipus ordinal, s'utilitza per ordenar les afluents d'una llera respecte del nivells anteriors. Un nombre '1xy' de nivell 3 indica que és l'afluent y de l'afluent x de la llera principal. En l'[Inventario oficial de cauces de la Demarcación Hidrpgráfica de Tenerife](https://www.aguastenerife.org/images/pdf/PHT1erCiclo/III-DocumentoGestionGobernanza/III-1-Normativa/III-1-2-Anejos/III-1-2-Anejo4-InventarioCauces.pdf) es pot consultar la jerarquia de totes les lleres.
 
-Per exemple, si una llera té nivell 1 (amb identificador 3, per exemple) vol dir que és un dels rius (el tercer identificat) principals de la conca; els que tenguin nivell 2 i l'identificador 31, 32, ..., 39, 3A són les bifurcacions d'aquella llera. Aquestes poden tenir altres bifurcacions, que serien de nivell 3 i per exemple 311, 312, ...
+Per exemple, si una llera té nivell 1 vol dir que és un dels rius principals de la conca; si d'un d'aquests torrents de nivell 1 llavors 11, 12, ..., 19, 1A són les bifurcacions d'aquella llera. Aquestes poden tenir altres bifurcacions, per exemple 111, 112, ... I així inductivament. Notem que la primera xifra sempre sirà 1 perquè comença a un torrent principal sempre. També cal explicar que podem tenir diversos afluents amb el mateix ordre, ja que el que els diferencia és l'id del corrent d'aigua principal (**cauce_principal_id**)
 
 - **cauce_longitud_2d**: de tipus quantitatiu continu, és la mesura de la longitud de la llera en metres si fos mesurat sobre un mapa.
 
@@ -134,3 +134,15 @@ ggplot(df_long, aes(x = Row, y = value, fill = variable)) +
   geom_bar(stat = 'identity', position = 'dodge') +
   labs(x = 'Row', y = 'Values', title = 'Bar Graph of Column2 and Column3 for Each Row') +
   scale_fill_manual(values = c('Column2' = 'blue', 'Column3' = 'green'))
+````
+
+
+Per seguir comparant el dos tipus de longituts, el que farem serà agafarles 5 lleres amb més afluents, i veure la relació d'aquestes dues longituts.
+
+```{r}
+freqüències=table(rius$cuenca_principal_id)
+freqüències_ordenades=sort(freqüències,decreasing = TRUE)
+top_5_rius=head(freqüències_ordenades,5)
+top_5_rius #Aquests són els idprincipals dels rius amb més afluents.
+suma_long2d = 0
+````
