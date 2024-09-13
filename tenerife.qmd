@@ -1,0 +1,81 @@
+---
+title: "Títol"
+author: "Miquel Àngel Aguiló, Joan Camps, Gerard Ribas"
+format: html
+lang: ca
+---
+
+```{css, echo=FALSE}
+/* Estil de sortida per HTML/CSS */
+/* Per posar notes pròpies */
+todo {color: magenta}
+gra {color: rgb(237, 65, 65)}
+jct {color: #6666ff}
+maa {color: #66bb66}
+note {color: orange}
+comment {display: none}
+gra::before {
+   content: "[G: ";
+   font-weight: bold;
+}
+jct::before {
+   content: "[J: ";
+   font-weight: bold;
+}
+maa::before {
+   content: "[M: ";
+   font-weight: bold;
+}
+note::before {
+   content: "[NOTA: ";
+   font-weight: bold;
+}
+todo::before {
+   content: "[TODO: ";
+   font-weight: bold;
+}
+gra::after, jct::after, note::after, todo::after, maa:after {
+   content: "]";
+}
+```
+
+# Introducció i objectiu
+blablabla
+
+<gra>Comentari Gerard</gra>
+
+<jct>Comentari Joan</jct>
+
+<maa>Comentari Miki</maa>
+
+<todo>un TODO</todo>
+
+# Anàlisi exploratòria
+## Càrrega de dades
+Carreguem el CSV a R.
+```{r}
+rius = read.csv("inventario-insular-de-cauces-de-tenerife.csv")
+str(rius)
+```
+
+Es pot consultar [aquesta web](https://datos.tenerife.es/es/datos/tablero?resourceId=f630dd85-9e4f-45f6-8bd4-212924a8a0b0) per entendre les variables. Per exemple, el nivell i l'ordre identifiquen les bifurcacions de les lleres. Això és, si una llera té nivell 1 (amb identificador 3, per exemple) vol dir que és un dels rius (el tercer identificat) principals de la conca; els que tenguin nivell 2 i l'identificador 31, 32, ..., 39, 3A són les bifurcacions d'aquella llera. Aquestes poden tenir altres bifurcacions, que serien de nivell 3 i per exemple 311, 312, ...
+
+Respecte la longitud, el camp `longitud_2d` mesura la longitud de la llera en metres si el mesuràssim en un mapa, mentre que `longitud_3d` és la longitud real del riu tenint en compte l'altitud.
+
+Finalment, es poden agrupar les lleres per conques gràcies al camp `cuenca_principal_id`, que ens identifica la conca (i algunes tenen nom, que seria `cauce_nombre_phi`).
+
+## Longituds en 2D i en 3D globals
+<todo> afegir llegenda, arreglar títols gràfiques, ... </todo>
+
+Mostrem la distribució de les longituds en metres en 2D i en 3D superposades en un mateix gràfic.
+```{r}
+plot(density(rius$cauce_longitud_2d), col = "blue")
+lines(density(rius$cauce_longitud_3d), col = "red")
+```
+
+Com que hi ha molt pocs rius que arribin al quilòmetre de llargària, visualitzarem millor la densitat si ens restringim a aquestes lleres.
+```{r}
+sprintf("Rius de menys d'1km (en 2d): %d", sum(rius$cauce_longitud_2d < 1000))
+plot(density(rius$cauce_longitud_2d), col = "blue", xlim = c(0, 1000))
+lines(density(rius$cauce_longitud_3d), col = "red")
+```
