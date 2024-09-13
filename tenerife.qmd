@@ -39,9 +39,15 @@ gra::after, jct::after, note::after, todo::after, maa:after {
 }
 ```
 
+```{r, echo=FALSE, include=FALSE}
+library(tidyverse)
+library(ggplot2)
+```
+
+
 # Introducció i objectiu
 
-blablabla
+blablabla. Idea: comprovar si les longituds 2d i 3d segueixen la mateixa distribució
 
 <gra>Comentari Gerard</gra>
 
@@ -74,7 +80,7 @@ Les dades tracten sobre lleres de l'illa de Tenerife. Les variables que es conte
 
 -   **cauce_nivel**: de tipus ordinal, s'utilitza per identificar i ordenar les diferents bifurcacions d'una mateixa llera segons el grau d'importància. El nivell 1 indica una llera principal, i nivells superiors són afluents dels nivells anteriors.
 
--   **cauce_orden**: de tipus ordinal, s'utilitza per ordenar les afluents d'una llera respecte del nivells anteriors. Un nombre '1xy' de nivell 3 indica que és l'afluent y de l'afluent x de la llera principal. En l'[INVENTARIO OFICIAL DE CAUCES DE LA DEMARCACIÓN HIDROGRÁFICA DE TENERIFE](https://www.aguastenerife.org/images/pdf/PHT1erCiclo/III-DocumentoGestionGobernanza/III-1-Normativa/III-1-2-Anejos/III-1-2-Anejo4-InventarioCauces.pdf) es pot consultar la jerarquia de totes les lleres.
+-   **cauce_orden**: de tipus ordinal, s'utilitza per ordenar les afluents d'una llera respecte del nivells anteriors. Un nombre '1xy' de nivell 3 indica que és l'afluent y de l'afluent x de la llera principal. En l'[Inventario oficial de cauces de la Demarcación Hidrpgráfica de Tenerife](https://www.aguastenerife.org/images/pdf/PHT1erCiclo/III-DocumentoGestionGobernanza/III-1-Normativa/III-1-2-Anejos/III-1-2-Anejo4-InventarioCauces.pdf) es pot consultar la jerarquia de totes les lleres.
 
 Per exemple, si una llera té nivell 1 (amb identificador 3, per exemple) vol dir que és un dels rius (el tercer identificat) principals de la conca; els que tenguin nivell 2 i l'identificador 31, 32, ..., 39, 3A són les bifurcacions d'aquella llera. Aquestes poden tenir altres bifurcacions, que serien de nivell 3 i per exemple 311, 312, ...
 
@@ -82,11 +88,11 @@ Per exemple, si una llera té nivell 1 (amb identificador 3, per exemple) vol di
 
 - **cauce_longitud_3d**: de tipus quantitatiu continu, és la mesura de la longitud real del riu tenint en compte l'altitud (mesurat sobre un model digital del terreny).
 
-- **cauce_principal_id**: de tipus qualitatiu, és un identificador de les conques de l'illa. Totes les lleres que desenboquen en una mateixa conca formen una xarxa.
+- **cuenca_principal_id**: de tipus qualitatiu, és un identificador de les conques de l'illa. Totes les lleres que desenboquen en una mateixa conca formen una xarxa.
 
-- **cauce_nombre_phi**: de tipus qualitatiu, és el nom de la conca que consta en el PHI (Plan Hidrológico Insular)
+- **cauce_nombre_phi**: de tipus qualitatiu, és el nom de llera que consta en el PHI (Plan Hidrológico Insular)
 
--**cauce_rotulo_phi**: de tipus qualitatiu, és el ròtul o nom que s'empra a la pràctica per etiquetar cada llera en el PHI.
+- **cauce_rotulo_phi**: de tipus qualitatiu, és el ròtul o nom que s'empra a la pràctica per etiquetar cada llera en el PHI.
 
 ## Longituds en 2D i en 3D globals
 
@@ -106,3 +112,25 @@ sprintf("Rius de menys d'1km (en 2d): %d", sum(rius$cauce_longitud_2d < 1000))
 plot(density(rius$cauce_longitud_2d), col = "blue", xlim = c(0, 1000))
 lines(density(rius$cauce_longitud_3d), col = "red")
 ```
+
+Vegem en un diagrama de barres les longituds 2d i 3d acumulades en les lleres que arriben a les conques principals. Entendrem per principals aquelles conques amb nom amb més lleres que hi desenboquen.
+```{r}
+#Agrupam per nombre de conca, i acumulam valors de longituds
+df_2 <- rius %>%
+    group_by(cuenca_principal_id) %>%
+    summarise(cauce_longitud_2d=sum(cauce_longitud_2d), cauce_longitud_3d=sum(cauce_longitud_3d), count = n())
+#només ens quedam amb les 4 conques amb més lleres
+df_2 = df_2[order(df_2$count,decreasing=TRUE, na.last=FALSE),]
+df_2=df_2[1:4,]
+
+#Feim els diagrames de barres
+
+# Reshape the data for easier plotting
+df_long <- df %>%
+  pivot_longer(cols = c(cauce_longitud_2d, cauce_longitud_2d), names_to = "variable", values_to = "value")
+
+# Create the bar plot
+ggplot(df_long, aes(x = Row, y = value, fill = variable)) +
+  geom_bar(stat = 'identity', position = 'dodge') +
+  labs(x = 'Row', y = 'Values', title = 'Bar Graph of Column2 and Column3 for Each Row') +
+  scale_fill_manual(values = c('Column2' = 'blue', 'Column3' = 'green'))
