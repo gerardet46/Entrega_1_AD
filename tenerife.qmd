@@ -82,7 +82,8 @@ Les dades tracten sobre lleres de l'illa de Tenerife. Les variables que es conte
 
 -   **cauce_orden**: de tipus ordinal, s'utilitza per ordenar les afluents d'una llera respecte del nivells anteriors. Un nombre '1xy' de nivell 3 indica que és l'afluent y de l'afluent x de la llera principal. En l'[Inventario oficial de cauces de la Demarcación Hidrpgráfica de Tenerife](https://www.aguastenerife.org/images/pdf/PHT1erCiclo/III-DocumentoGestionGobernanza/III-1-Normativa/III-1-2-Anejos/III-1-2-Anejo4-InventarioCauces.pdf) es pot consultar la jerarquia de totes les lleres.
 
-Per exemple, si una llera té nivell 1 vol dir que és un dels rius principals de la conca; si d'un d'aquests torrents de nivell 1 llavors 11, 12, ..., 19, 1A són les bifurcacions d'aquella llera. Aquestes poden tenir altres bifurcacions, per exemple 111, 112, ... I així inductivament. Notem que la primera xifra sempre sirà 1 perquè comença a un torrent principal sempre. També cal explicar que podem tenir diversos afluents amb el mateix ordre, ja que el que els diferencia és l'id del corrent d'aigua principal (**cauce_principal_id**)
+Per exemple, si una llera té nivell 1 vol dir que és un dels rius principals de la conca; si d'un d'aquests torrents de nivell 1 llavors 11, 12, ..., 19, 1A són les bifurcacions d'aquella llera. Aquestes poden tenir altres bifurcacions, per exemple 111, 112, ... I així inductivament. Notem que la primera xifra sempre sirà 1 perquè comença a un torrent principal sempre. També cal explicar que podem tenir diversos afluents amb el mateix ordre, ja que el que els diferencia és l'id del corrent d'aigua principal (**cauce_principal_id**).
+Tots els afluents d'una llera contenen el mateix nom al camp **cauce_nombre_phi** i **cauce_rotulo_phi**, de manera que amb aquests camps podem vincular la llera principal amb els seus afluents.
 
 - **cauce_longitud_2d**: de tipus quantitatiu continu, és la mesura de la longitud de la llera en metres si fos mesurat sobre un mapa.
 
@@ -123,6 +124,17 @@ for(i in 1:max(rius$cauce_nivel)) {
   lines(density(subset(rius, cauce_nivel==i)$cauce_longitud_3d), col = "red")
 }
 ```
+
+Vinculant els gràfics anteriors a la pregunta proposada, podem considerar la diferència relativa entre les longituds en cada llera, i visualitzar les densitats d'aquestes diferències per a cada nivell.
+
+```{r}
+rius$diferencia = (rius$cauce_longitud_3d - rius$cauce_longitud_2d)/rius$cauce_longitud_3d
+for(i in 1:max(rius$cauce_nivel)) {
+  plot(density(subset(rius, cauce_nivel==i)$diferencia), col = "grey", main=paste("Densitat","nivell",i), xlim=c(0,0.5))
+
+}
+```
+
 
 De manera senzilla, podem trobar la mitjana, la desviació típica i la variància dels dos tipus de longitud.
 ```{r}
@@ -184,11 +196,30 @@ barplot(t(values), beside = TRUE, names.arg = df_2$cuenca_principal_id, col = c(
 
 ```
 
+Una informació que pot resultar rellevant és identificar les lleres que tenen més afluents. Podem mostrar en un diagrama de barres les 10 més nombroses.
+```{r}
+#Agrupam segons el nom de la llera principal
+df_3 <- rius %>%
+    group_by(cauce_rotulo_phi) %>%
+    summarise(count = n())
+#Eliminam aquelles lleres que no tenen nom (que sempre són lleres principals i no tenen afluents), i ens quedam amb els 10 que en tenen més
+df_3 = df_3[order(df_3$count,decreasing=TRUE, na.last=FALSE),]
+df_3=df_3[2:10,]
+#Ho mostram en un gràfic
+par(mar = c(13, 4, 2, 2))
+
+bp = barplot(df_3$count, beside = TRUE, names.arg = df_3$cauce_rotulo_phi, las=2, ylab = 'Afluents',
+        main = 'Lleres amb més afluents', ylim=c(0,max(df_3$count)+25))
+text(bp, df_3$count, df_3$count, pos = 3, xpd = NA)
+
+```
+
+
 <jct>Fins aquí lo fet Joan. Després ja ordenam document</jct>
 
 Per seguir comparant el dos tipus de longituts, el que farem serà agafarles 5 lleres amb més afluents, i veure la relació d'aquestes dues longituts.
 
-<jct>Alerta, fora mirar es document des PHI, i limitant-nos únicament a nes dataframe que tenim, no podem sabre a quins rius principals pertanyen es afluents, de manera que no podem vincular lleres principals amb les seves secundàries. Realment ho estàs fent amb CONQUES</jct>
+<jct>Alerta, aquí estas fent conques, no lleres. Per sabre ses lleres amb més afluents has de mirar es camp cauce_nombre_phi (mira adalt on descriven ses variables, he afegit un paràgraf on s'explia. He comprovat amb es document aquell des noms i classificació i sí que quadra)</jct>
 ```{r}
 freqüències=table(rius$cuenca_principal_id)
 freqüències_ordenades=sort(freqüències,decreasing = TRUE)
