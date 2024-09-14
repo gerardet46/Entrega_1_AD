@@ -113,6 +113,38 @@ plot(density(rius$cauce_longitud_2d), col = "blue", xlim = c(0, 1000))
 lines(density(rius$cauce_longitud_3d), col = "red")
 ```
 
+<jct>Comença part Joan. Després ja ordenam document</jct>
+
+Una altra classificació que pot interessar-nos és segons els nivells d'importàcia de les lleres. Podríem plantejar si els tipus de longitud s'avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació. 
+
+```{r}
+for(i in 1:max(rius$cauce_nivel)) {
+  plot(density(subset(rius, cauce_nivel==i)$cauce_longitud_2d), col = "blue", main=paste("Densitat","nivell",i))
+  lines(density(subset(rius, cauce_nivel==i)$cauce_longitud_3d), col = "red")
+}
+```
+
+De manera senzilla, podem trobar la mitjana, la desviació típica i la variància dels dos tipus de longitud.
+```{r}
+x2=mean(rius$cauce_longitud_2d)
+x3=mean(rius$cauce_longitud_3d)
+s=paste("Mitjana longitud 2d:", x2," || Mitjana londitud 3d:", x3)
+s
+```
+```{r}
+n=nrow(rius)
+sd2_2d = var(rius$cauce_longitud_2d)*(n-1)/n
+sd2_3d = var(rius$cauce_longitud_3d)*(n-1)/n
+s=paste("Variància longitud 2d:", sd2_2d," || Variància londitud 3d:", sd2_3d)
+s
+```
+```{r}
+sd_2d=sqrt(sd2_2d)
+sd_3d=sqrt(sd2_3d)
+s=paste("Desviació típica longitud 2d:", sd_2d," || Desviació típica londitud 3d:", sd_3d)
+s
+```
+
 Podem fer-nos una idea de si la diferència entre les longituds 2d i 3d registrades és consistent. A partir de les conques principals, considerem l'acumulat de les longituds 2d i 3d de les lleres que hi desenboquen, i visualitzem l'error relatiu (això és $ \frac{long\_3d - long\_2d}{long\_3d}$) entre dits valors. Entendrem per conques principals aquelles en què hi ha un major nombre de lleres que hi finalitzen.
 
 ```{r}
@@ -152,9 +184,11 @@ barplot(t(values), beside = TRUE, names.arg = df_2$cuenca_principal_id, col = c(
 
 ```
 
+<jct>Fins aquí lo fet Joan. Després ja ordenam document</jct>
 
 Per seguir comparant el dos tipus de longituts, el que farem serà agafarles 5 lleres amb més afluents, i veure la relació d'aquestes dues longituts.
 
+<jct>Alerta, fora mirar es document des PHI, i limitant-nos únicament a nes dataframe que tenim, no podem sabre a quins rius principals pertanyen es afluents, de manera que no podem vincular lleres principals amb les seves secundàries. Realment ho estàs fent amb CONQUES</jct>
 ```{r}
 freqüències=table(rius$cuenca_principal_id)
 freqüències_ordenades=sort(freqüències,decreasing = TRUE)
