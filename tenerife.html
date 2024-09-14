@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.45">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Miquel Àngel Aguiló, Joan Camps, Gerard Ribas">
 
-<title>Títol</title>
+<title>Anàlisi Exploratòria Lleres Tenerife</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -34,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -80,7 +80,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Títol</h1>
+<h1 class="title">Anàlisi Exploratòria Lleres Tenerife</h1>
 </div>
 
 
@@ -140,14 +140,17 @@ gra::after, jct::after, note::after, todo::after, maa:after {
 </div>
 <section id="introducció-i-objectiu" class="level1">
 <h1>Introducció i objectiu</h1>
-<p>blablabla</p>
-<p><gra>Comentari Gerard</gra> <jct>Comentari Joan</jct> <maa>Comentari Miki</maa> <todo>un TODO</todo></p>
+<p>blablabla. Idea: comprovar si les longituds 2d i 3d segueixen la mateixa distribució</p>
+<p><gra>Comentari Gerard</gra></p>
+<p><jct>Comentari Joan</jct></p>
+<p><maa>Comentari Miki</maa></p>
+<p><todo>un TODO</todo></p>
 </section>
 <section id="anàlisi-exploratòria" class="level1">
 <h1>Anàlisi exploratòria</h1>
 <section id="càrrega-de-dades" class="level2">
 <h2 class="anchored" data-anchor-id="càrrega-de-dades">Càrrega de dades</h2>
-<p>Carreguem el CSV a R.</p>
+<p>Carreguem el CSV a R, i comecem comentant les dades que hi apareixen.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rius <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"inventario-insular-de-cauces-de-tenerife.csv"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(rius)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -165,9 +168,23 @@ gra::after, jct::after, note::after, todo::after, maa:after {
  $ cauce_rotulo_phi   : chr  "Bco. de Flandes" "Bco. de Flandes" "Bco. de Flandes" "Bco. de Flandes" ...</code></pre>
 </div>
 </div>
-<p>Es pot consultar <a href="https://datos.tenerife.es/es/datos/tablero?resourceId=f630dd85-9e4f-45f6-8bd4-212924a8a0b0">aquesta web</a> per entendre les variables. Per exemple, el nivell i l’ordre identifiquen les bifurcacions de les lleres. Això és, si una llera té nivell 1 (amb identificador 3, per exemple) vol dir que és un dels rius (el tercer identificat) principals de la conca; els que tenguin nivell 2 i l’identificador 31, 32, …, 39, 3A són les bifurcacions d’aquella llera. Aquestes poden tenir altres bifurcacions, que serien de nivell 3 i per exemple 311, 312, …</p>
-<p>Respecte la longitud, el camp <code>longitud_2d</code> mesura la longitud de la llera en metres si el mesuràssim en un mapa, mentre que <code>longitud_3d</code> és la longitud real del riu tenint en compte l’altitud.</p>
-<p>Finalment, es poden agrupar les lleres per conques gràcies al camp <code>cuenca_principal_id</code>, que ens identifica la conca (i algunes tenen nom, que seria <code>cauce_nombre_phi</code>).</p>
+<p>Es pot consultar <a href="https://datos.tenerife.es/es/datos/tablero?resourceId=f630dd85-9e4f-45f6-8bd4-212924a8a0b0">aquesta web</a> per entendre les variables.</p>
+<p>Les dades tracten sobre lleres de l’illa de Tenerife. Les variables que es contemplen són les que segueixen:</p>
+<ul>
+<li><p><strong>cauce_id</strong>: de tipus qualitatiu, nombre que identifica unívocament cada una de les lleres registrades a l’illa.</p></li>
+<li><p><strong>cauce_toponimos</strong>: de tipus qualitatiu, es refereix al nom donat a la llera.</p></li>
+<li><p><strong>cacue_alonimos</strong>: de tipus qualitatiu, es refereix a una possible variant del nom expressat a la variable anterior per referir-se a la mateixa llera.</p></li>
+<li><p><strong>cauce_nivel</strong>: de tipus ordinal, s’utilitza per identificar i ordenar les diferents bifurcacions d’una mateixa llera segons el grau d’importància. El nivell 1 indica una llera principal, i nivells superiors són afluents dels nivells anteriors.</p></li>
+<li><p><strong>cauce_orden</strong>: de tipus ordinal, s’utilitza per ordenar les afluents d’una llera respecte del nivells anteriors. Un nombre ‘1xy’ de nivell 3 indica que és l’afluent y de l’afluent x de la llera principal. En l’<a href="https://www.aguastenerife.org/images/pdf/PHT1erCiclo/III-DocumentoGestionGobernanza/III-1-Normativa/III-1-2-Anejos/III-1-2-Anejo4-InventarioCauces.pdf">Inventario oficial de cauces de la Demarcación Hidrpgráfica de Tenerife</a> es pot consultar la jerarquia de totes les lleres.</p></li>
+</ul>
+<p>Per exemple, si una llera té nivell 1 vol dir que és un dels rius principals de la conca; si d’un d’aquests torrents de nivell 1 llavors 11, 12, …, 19, 1A són les bifurcacions d’aquella llera. Aquestes poden tenir altres bifurcacions, per exemple 111, 112, … I així inductivament. Notem que la primera xifra sempre sirà 1 perquè comença a un torrent principal sempre. També cal explicar que podem tenir diversos afluents amb el mateix ordre, ja que el que els diferencia és l’id del corrent d’aigua principal (<strong>cauce_principal_id</strong>)</p>
+<ul>
+<li><p><strong>cauce_longitud_2d</strong>: de tipus quantitatiu continu, és la mesura de la longitud de la llera en metres si fos mesurat sobre un mapa.</p></li>
+<li><p><strong>cauce_longitud_3d</strong>: de tipus quantitatiu continu, és la mesura de la longitud real del riu tenint en compte l’altitud (mesurat sobre un model digital del terreny).</p></li>
+<li><p><strong>cuenca_principal_id</strong>: de tipus qualitatiu, és un identificador de les conques de l’illa. Totes les lleres que desenboquen en una mateixa conca formen una xarxa.</p></li>
+<li><p><strong>cauce_nombre_phi</strong>: de tipus qualitatiu, és el nom de llera que consta en el PHI (Plan Hidrológico Insular)</p></li>
+<li><p><strong>cauce_rotulo_phi</strong>: de tipus qualitatiu, és el ròtul o nom que s’empra a la pràctica per etiquetar cada llera en el PHI.</p></li>
+</ul>
 </section>
 <section id="longituds-en-2d-i-en-3d-globals" class="level2">
 <h2 class="anchored" data-anchor-id="longituds-en-2d-i-en-3d-globals">Longituds en 2D i en 3D globals</h2>
@@ -179,7 +196,7 @@ gra::after, jct::after, note::after, todo::after, maa:after {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tenerife_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tenerife_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -195,10 +212,77 @@ gra::after, jct::after, note::after, todo::after, maa:after {
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="tenerife_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="tenerife_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
+</div>
+<p>Podem fer-nos una idea de si la diferència entre les longituds 2d i 3d registrades és consistent. A partir de les conques principals, considerem l’acumulat de les longituds 2d i 3d de les lleres que hi desenboquen, i visualitzem l’error relatiu (això és $ $) entre dits valors. Entendrem per conques principals aquelles en què hi ha un major nombre de lleres que hi finalitzen.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Agrupam per nombre de conca, i acumulam valors de longituds</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>df_2 <span class="ot">&lt;-</span> rius <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(cuenca_principal_id) <span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">cauce_longitud_2d=</span><span class="fu">sum</span>(cauce_longitud_2d), <span class="at">cauce_longitud_3d=</span><span class="fu">sum</span>(cauce_longitud_3d), <span class="at">count =</span> <span class="fu">n</span>())</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Ens quedam amb les 5 conques amb més lleres</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>df_2 <span class="ot">=</span> df_2[<span class="fu">order</span>(df_2<span class="sc">$</span>count,<span class="at">decreasing=</span><span class="cn">TRUE</span>, <span class="at">na.last=</span><span class="cn">FALSE</span>),]</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>df_2<span class="ot">=</span>df_2[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,]</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Diagrama de barres de la diferència relativa al total de longitud 3d. i.e (3d-2d)/3d</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>df_2<span class="sc">$</span>dif_relativa <span class="ot">=</span> ((df_2<span class="sc">$</span>cauce_longitud_3d <span class="sc">-</span> df_2<span class="sc">$</span>cauce_longitud_2d) <span class="sc">/</span> df_2<span class="sc">$</span>cauce_longitud_3d)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(df_2<span class="sc">$</span>dif_relativa, <span class="at">beside =</span> <span class="cn">TRUE</span>, <span class="at">names.arg =</span> df_2<span class="sc">$</span>cuenca_principal_id,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">'id Conca'</span>, <span class="at">ylab =</span> <span class="st">'Error relatiu'</span>,<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">'Diferència relativa de longituds acumulades'</span>)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tenerife_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Per apreciar-ho millor, restringim l’eix d’ordenades al valor màxim del gràfic.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(df_2<span class="sc">$</span>dif_relativa, <span class="at">beside =</span> <span class="cn">TRUE</span>, <span class="at">names.arg =</span> df_2<span class="sc">$</span>cuenca_principal_id,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">'id Conca'</span>, <span class="at">ylab =</span> <span class="st">'Error relatiu'</span>,<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fu">max</span>(df_2<span class="sc">$</span>dif_relativa)<span class="sc">+</span><span class="fl">0.01</span>),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">'Diferència relativa de longituds acumulades'</span>)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tenerife_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><jct>Havia fet tb aquest gràfic, però amb so ser valors tan diferents entre conques quasi no s’aprecien bé ses diferències. Ho podem llevar, no?</jct></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a matrix of the two columns to plot</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>values <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(df_2[, <span class="fu">c</span>(<span class="st">'cauce_longitud_2d'</span>, <span class="st">'cauce_longitud_3d'</span>)])</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the barplot</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="fu">t</span>(values), <span class="at">beside =</span> <span class="cn">TRUE</span>, <span class="at">names.arg =</span> df_2<span class="sc">$</span>cuenca_principal_id, <span class="at">col =</span> <span class="fu">c</span>(<span class="st">'blue'</span>, <span class="st">'red'</span>),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">'Long 2d'</span>, <span class="st">'Long 3d'</span>), <span class="at">xlab =</span> <span class="st">'id Conca'</span>, <span class="at">ylab =</span> <span class="st">'Acumulat'</span>, </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">'Longituds acumulades per conques'</span>)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tenerife_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Per seguir comparant el dos tipus de longituts, el que farem serà agafarles 5 lleres amb més afluents, i veure la relació d’aquestes dues longituts.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>freqüències<span class="ot">=</span><span class="fu">table</span>(rius<span class="sc">$</span>cuenca_principal_id)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>freqüències_ordenades<span class="ot">=</span><span class="fu">sort</span>(freqüències,<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>top_5_rius<span class="ot">=</span><span class="fu">head</span>(freqüències_ordenades,<span class="dv">5</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>top_5_rius <span class="co">#Aquests són els idprincipals dels rius amb més afluents.</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+275   8 367   9 409 
+225 157 157 149 131 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>suma_long2d <span class="ot">=</span> <span class="dv">0</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -240,7 +324,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const onCopySuccess = function(e) {
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -272,29 +367,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
   });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
-    });
-    clipboardModal.on('success', onCopySuccess);
-  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -302,7 +375,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {

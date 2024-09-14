@@ -113,28 +113,44 @@ plot(density(rius$cauce_longitud_2d), col = "blue", xlim = c(0, 1000))
 lines(density(rius$cauce_longitud_3d), col = "red")
 ```
 
-Vegem en un diagrama de barres les longituds 2d i 3d acumulades en les lleres que arriben a les conques principals. Entendrem per principals aquelles conques amb nom amb més lleres que hi desenboquen.
+Podem fer-nos una idea de si la diferència entre les longituds 2d i 3d registrades és consistent. A partir de les conques principals, considerem l'acumulat de les longituds 2d i 3d de les lleres que hi desenboquen, i visualitzem l'error relatiu (això és $ \frac{long\_3d - long\_2d}{long\_3d}$) entre dits valors. Entendrem per conques principals aquelles en què hi ha un major nombre de lleres que hi finalitzen.
+
 ```{r}
 #Agrupam per nombre de conca, i acumulam valors de longituds
 df_2 <- rius %>%
     group_by(cuenca_principal_id) %>%
     summarise(cauce_longitud_2d=sum(cauce_longitud_2d), cauce_longitud_3d=sum(cauce_longitud_3d), count = n())
-#només ens quedam amb les 4 conques amb més lleres
+#Ens quedam amb les 5 conques amb més lleres
 df_2 = df_2[order(df_2$count,decreasing=TRUE, na.last=FALSE),]
-df_2=df_2[1:4,]
+df_2=df_2[1:5,]
 
-#Feim els diagrames de barres
+#Diagrama de barres de la diferència relativa al total de longitud 3d. i.e (3d-2d)/3d
+df_2$dif_relativa = ((df_2$cauce_longitud_3d - df_2$cauce_longitud_2d) / df_2$cauce_longitud_3d)
 
-# Reshape the data for easier plotting
-df_long <- df %>%
-  pivot_longer(cols = c(cauce_longitud_2d, cauce_longitud_2d), names_to = "variable", values_to = "value")
+barplot(df_2$dif_relativa, beside = TRUE, names.arg = df_2$cuenca_principal_id,
+        xlab = 'id Conca', ylab = 'Error relatiu',ylim = c(0,1),
+        main = 'Diferència relativa de longituds acumulades')
 
-# Create the bar plot
-ggplot(df_long, aes(x = Row, y = value, fill = variable)) +
-  geom_bar(stat = 'identity', position = 'dodge') +
-  labs(x = 'Row', y = 'Values', title = 'Bar Graph of Column2 and Column3 for Each Row') +
-  scale_fill_manual(values = c('Column2' = 'blue', 'Column3' = 'green'))
-````
+```
+Per apreciar-ho millor, restringim l'eix d'ordenades al valor màxim del gràfic.
+```{r}
+barplot(df_2$dif_relativa, beside = TRUE, names.arg = df_2$cuenca_principal_id,
+        xlab = 'id Conca', ylab = 'Error relatiu',ylim = c(0,max(df_2$dif_relativa)+0.01),
+        main = 'Diferència relativa de longituds acumulades')
+```
+
+
+<jct>Havia fet tb aquest gràfic, però amb so ser valors tan diferents entre conques quasi no s'aprecien bé ses diferències. Ho podem llevar, no?</jct>
+```{r}
+# Create a matrix of the two columns to plot
+values <- as.matrix(df_2[, c('cauce_longitud_2d', 'cauce_longitud_3d')])
+
+# Create the barplot
+barplot(t(values), beside = TRUE, names.arg = df_2$cuenca_principal_id, col = c('blue', 'red'),
+        legend = c('Long 2d', 'Long 3d'), xlab = 'id Conca', ylab = 'Acumulat', 
+        main = 'Longituds acumulades per conques')
+
+```
 
 
 Per seguir comparant el dos tipus de longituts, el que farem serà agafarles 5 lleres amb més afluents, i veure la relació d'aquestes dues longituts.
@@ -145,4 +161,4 @@ freqüències_ordenades=sort(freqüències,decreasing = TRUE)
 top_5_rius=head(freqüències_ordenades,5)
 top_5_rius #Aquests són els idprincipals dels rius amb més afluents.
 suma_long2d = 0
-````
+```
