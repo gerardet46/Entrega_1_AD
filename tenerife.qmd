@@ -51,8 +51,6 @@ library(ggplot2)
 
 # Introducció i objectiu
 
-<note>Recordau abans de seguir treballant fer `PULL`!! (i comprovar si hem penjat res també abans des push) Per evitar conflictes i branques</note>
-
 El conjunt de dades escollit, [Cauces de la isla de Tenerife](https://datos.gob.es/es/catalogo/a05003638-cauces-de-la-isla-de-tenerife) (concretament, l'*inventario insular de cauces de Tenerife*), conté informació geogràfica sobre la classificació i nomenclatura de les lleres de Tenerife, així com la seva longitud i la conca a la qual hi pertanyen. Va ser actualitzada per darrera vegada el 31/08 d'aquest any.
 
 Les dades referents a la longitud de les dades apareix calculada sobre mapes 2d i sobre models 3d de l'illa. Així, posterior a l'anàlisi exploratòria de les dades podríem plantejar la pregunta de si els dos tipus de longituds registrats segueixen la mateixa distribució, en el sentit de si la raó entre la longitud 3d i la 2d és la mateixa.
@@ -78,7 +76,7 @@ Es pot consultar [aquesta web](https://datos.tenerife.es/es/datos/tablero?resour
 
 -   **cauce_nivel**: de tipus ordinal, s'utilitza per identificar i ordenar les diferents bifurcacions d'una mateixa llera segons el grau d'importància. El nivell 1 indica una llera principal, i nivells superiors són afluents dels nivells anteriors.
 
--   **cauce_orden**: de tipus ordinal, s'utilitza per ordenar les afluents d'una llera respecte del nivells anteriors. Un nombre '1xy' de nivell 3 indica que és l'afluent y de l'afluent x de la llera principal. En el [Inventario oficial de cauces de la Demarcación Hidrpgráfica de Tenerife](https://www.aguastenerife.org/images/pdf/PHT1erCiclo/III-DocumentoGestionGobernanza/III-1-Normativa/III-1-2-Anejos/III-1-2-Anejo4-InventarioCauces.pdf) es pot consultar la jerarquia de totes les lleres.
+-   **cauce_orden**: de tipus ordinal, s'utilitza per ordenar les afluents d'una llera respecte del nivells anteriors. Un nombre '1xy' de nivell 3 indica que és l'afluent y de l'afluent x de la llera principal. En el [Inventario oficial de cauces de la Demarcación Hidrográfica de Tenerife](https://www.aguastenerife.org/images/pdf/PHT1erCiclo/III-DocumentoGestionGobernanza/III-1-Normativa/III-1-2-Anejos/III-1-2-Anejo4-InventarioCauces.pdf) es pot consultar la jerarquia de totes les lleres.
 
 Per exemple, si una llera té nivell 1 vol dir que és un dels torrents principals de la conca; si d'un d'aquests torrents de nivell 1 llavors 11, 12, ..., 19, 1A són les bifurcacions d'aquella llera. Aquestes poden tenir altres bifurcacions, per exemple 111, 112, ... I així inductivament. Notem que la primera xifra serà 1 perquè sempre comença a un torrent principal. També cal explicar que podem tenir diversos afluents amb el mateix ordre, ja que el que els diferencia és l'id del corrent d'aigua principal (**cauce_principal_id**). Tots els afluents d'una llera contenen el mateix nom al camp **cauce_nombre_phi** i **cauce_rotulo_phi**, de manera que amb aquests camps podem vincular la llera principal amb els seus afluents.
 
@@ -161,15 +159,12 @@ for (i in 0:5) {
 x=c("1r","2n","3r","4t","5è")
 dades=data.frame(x,suma_long2d,suma_long3d)
 matriu_valors <- as.matrix(dades[, c("suma_long2d", "suma_long3d")])
-library(tidyr)
-library(ggplot2)
 datos_largo <- pivot_longer(dades, cols = suma_long3d:suma_long2d, names_to = "Tipus", values_to = "Longituds")
 ggplot(datos_largo, aes(x = x, y = Longituds, fill = Tipus)) +
   geom_bar(stat = "identity", position = "identity", alpha = 0.6) +
   labs(title = "Longituds de les 5 lleres amb més afluents", x = "Ordenació llera segons afluents", y = "Longitud acumulada afluents") +
   scale_fill_manual(values = c( "blue", "red")) +
   theme_minimal()
-
 ```
 Una altra classificació que pot interessar-nos és segons els nivells d'importància de les lleres. Podríem plantejar si els tipus de longitud s'avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació. 
 
@@ -238,7 +233,6 @@ par(mar = c(13, 4, 2, 2))
 bp = barplot(df_3$count, beside = TRUE, names.arg = df_3$cauce_rotulo_phi, las = 2, ylab = 'Afluents',
         main = 'Lleres amb més afluents', ylim = c(0,max(df_3$count)+25))
 text(bp, df_3$count, df_3$count, pos = 3, xpd = NA)
-
 ```
 
 També pot ser d'interès saber quants de torrents hi ha per cada nivell.
@@ -251,17 +245,13 @@ text(bp, nivells + 50, nivells)
 
 ## Regressió
 
-<gra>Ara que ho pens sa regressió lineal no és inferència?</gra>
-
-Calcularem la recta de regressió on la variable independent sirà la longitud en 2d, i la variable dependent, sirà la longitud en 3 dimensions de la suma dels afluents.
+Calcularem la recta de regressió on la variable independent serà la longitud en 2d, i la variable dependent, serà la longitud en 3 dimensions de la suma dels afluents.
 
 ```{r echo=F}
 longituts_2d=torrents$cauce_longitud_2d
 longituts_3d=torrents$cauce_longitud_3d
 # Ajustam el model de regressió lineal
 model <- lm(longituts_3d ~ longituts_2d)
-plot(longituts_3d~longituts_2d, main = "Recta de Regressió Lineal", xlab = "Longitud 2d", ylab = "Longitud 3d",col="blue", pch = 19)+abline(model, col = "red", lwd = 2)
+x <- plot(longituts_3d~longituts_2d, main = "Recta de Regressió Lineal", xlab = "Longitud 2d", ylab = "Longitud 3d",col="blue", pch = 19)+abline(model, col = "red", lwd = 2)
 ```
-<gra>Se pot llevar això de `integer(0)`?</gra>
-
 Podem observar que les variables *cauce_longitud_2d* i *cauce_longitud_3d* estan molt ben ajustades per aquest model de regressió lineal.

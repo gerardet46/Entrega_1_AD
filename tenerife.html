@@ -186,9 +186,6 @@ gra::after, jct::after, note::after, todo::after, maa:after {
 </div>
 <section id="introducció-i-objectiu" class="level1">
 <h1>Introducció i objectiu</h1>
-<note>
-Recordau abans de seguir treballant fer <code>PULL</code>!! (i comprovar si hem penjat res també abans des push) Per evitar conflictes i branques
-</note>
 <p>El conjunt de dades escollit, <a href="https://datos.gob.es/es/catalogo/a05003638-cauces-de-la-isla-de-tenerife">Cauces de la isla de Tenerife</a> (concretament, l’<em>inventario insular de cauces de Tenerife</em>), conté informació geogràfica sobre la classificació i nomenclatura de les lleres de Tenerife, així com la seva longitud i la conca a la qual hi pertanyen. Va ser actualitzada per darrera vegada el 31/08 d’aquest any.</p>
 <p>Les dades referents a la longitud de les dades apareix calculada sobre mapes 2d i sobre models 3d de l’illa. Així, posterior a l’anàlisi exploratòria de les dades podríem plantejar la pregunta de si els dos tipus de longituds registrats segueixen la mateixa distribució, en el sentit de si la raó entre la longitud 3d i la 2d és la mateixa.</p>
 </section>
@@ -220,7 +217,7 @@ Recordau abans de seguir treballant fer <code>PULL</code>!! (i comprovar si hem 
 <li><p><strong>cauce_toponimos</strong>: de tipus qualitatiu, es refereix al nom donat a la llera.</p></li>
 <li><p><strong>cacue_alonimos</strong>: de tipus qualitatiu, es refereix a una possible variant del nom expressat a la variable anterior per referir-se a la mateixa llera.</p></li>
 <li><p><strong>cauce_nivel</strong>: de tipus ordinal, s’utilitza per identificar i ordenar les diferents bifurcacions d’una mateixa llera segons el grau d’importància. El nivell 1 indica una llera principal, i nivells superiors són afluents dels nivells anteriors.</p></li>
-<li><p><strong>cauce_orden</strong>: de tipus ordinal, s’utilitza per ordenar les afluents d’una llera respecte del nivells anteriors. Un nombre ‘1xy’ de nivell 3 indica que és l’afluent y de l’afluent x de la llera principal. En el <a href="https://www.aguastenerife.org/images/pdf/PHT1erCiclo/III-DocumentoGestionGobernanza/III-1-Normativa/III-1-2-Anejos/III-1-2-Anejo4-InventarioCauces.pdf">Inventario oficial de cauces de la Demarcación Hidrpgráfica de Tenerife</a> es pot consultar la jerarquia de totes les lleres.</p></li>
+<li><p><strong>cauce_orden</strong>: de tipus ordinal, s’utilitza per ordenar les afluents d’una llera respecte del nivells anteriors. Un nombre ‘1xy’ de nivell 3 indica que és l’afluent y de l’afluent x de la llera principal. En el <a href="https://www.aguastenerife.org/images/pdf/PHT1erCiclo/III-DocumentoGestionGobernanza/III-1-Normativa/III-1-2-Anejos/III-1-2-Anejo4-InventarioCauces.pdf">Inventario oficial de cauces de la Demarcación Hidrográfica de Tenerife</a> es pot consultar la jerarquia de totes les lleres.</p></li>
 </ul>
 <p>Per exemple, si una llera té nivell 1 vol dir que és un dels torrents principals de la conca; si d’un d’aquests torrents de nivell 1 llavors 11, 12, …, 19, 1A són les bifurcacions d’aquella llera. Aquestes poden tenir altres bifurcacions, per exemple 111, 112, … I així inductivament. Notem que la primera xifra serà 1 perquè sempre comença a un torrent principal. També cal explicar que podem tenir diversos afluents amb el mateix ordre, ja que el que els diferencia és l’id del corrent d’aigua principal (<strong>cauce_principal_id</strong>). Tots els afluents d’una llera contenen el mateix nom al camp <strong>cauce_nombre_phi</strong> i <strong>cauce_rotulo_phi</strong>, de manera que amb aquests camps podem vincular la llera principal amb els seus afluents.</p>
 <ul>
@@ -355,14 +352,12 @@ Desviació típica    2023.422    2076.161</code></pre>
 <span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>x<span class="ot">=</span><span class="fu">c</span>(<span class="st">"1r"</span>,<span class="st">"2n"</span>,<span class="st">"3r"</span>,<span class="st">"4t"</span>,<span class="st">"5è"</span>)</span>
 <span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>dades<span class="ot">=</span><span class="fu">data.frame</span>(x,suma_long2d,suma_long3d)</span>
 <span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>matriu_valors <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(dades[, <span class="fu">c</span>(<span class="st">"suma_long2d"</span>, <span class="st">"suma_long3d"</span>)])</span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>datos_largo <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(dades, <span class="at">cols =</span> suma_long3d<span class="sc">:</span>suma_long2d, <span class="at">names_to =</span> <span class="st">"Tipus"</span>, <span class="at">values_to =</span> <span class="st">"Longituds"</span>)</span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_largo, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> Longituds, <span class="at">fill =</span> Tipus)) <span class="sc">+</span></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"identity"</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Longituds de les 5 lleres amb més afluents"</span>, <span class="at">x =</span> <span class="st">"Ordenació llera segons afluents"</span>, <span class="at">y =</span> <span class="st">"Longitud acumulada afluents"</span>) <span class="sc">+</span></span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>( <span class="st">"blue"</span>, <span class="st">"red"</span>)) <span class="sc">+</span></span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>datos_largo <span class="ot">&lt;-</span> <span class="fu">pivot_longer</span>(dades, <span class="at">cols =</span> suma_long3d<span class="sc">:</span>suma_long2d, <span class="at">names_to =</span> <span class="st">"Tipus"</span>, <span class="at">values_to =</span> <span class="st">"Longituds"</span>)</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(datos_largo, <span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> Longituds, <span class="at">fill =</span> Tipus)) <span class="sc">+</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>, <span class="at">position =</span> <span class="st">"identity"</span>, <span class="at">alpha =</span> <span class="fl">0.6</span>) <span class="sc">+</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Longituds de les 5 lleres amb més afluents"</span>, <span class="at">x =</span> <span class="st">"Ordenació llera segons afluents"</span>, <span class="at">y =</span> <span class="st">"Longitud acumulada afluents"</span>) <span class="sc">+</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>( <span class="st">"blue"</span>, <span class="st">"red"</span>)) <span class="sc">+</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -534,8 +529,7 @@ Desviació típica    2023.422    2076.161</code></pre>
 </section>
 <section id="regressió" class="level2">
 <h2 class="anchored" data-anchor-id="regressió">Regressió</h2>
-<p><gra>Ara que ho pens sa regressió lineal no és inferència?</gra></p>
-<p>Calcularem la recta de regressió on la variable independent sirà la longitud en 2d, i la variable dependent, sirà la longitud en 3 dimensions de la suma dels afluents.</p>
+<p>Calcularem la recta de regressió on la variable independent serà la longitud en 2d, i la variable dependent, serà la longitud en 3 dimensions de la suma dels afluents.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -544,11 +538,7 @@ Desviació típica    2023.422    2076.161</code></pre>
 </figure>
 </div>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code>integer(0)</code></pre>
 </div>
-</div>
-<p><gra>Se pot llevar això de <code>integer(0)</code>?</gra></p>
 <p>Podem observar que les variables <em>cauce_longitud_2d</em> i <em>cauce_longitud_3d</em> estan molt ben ajustades per aquest model de regressió lineal.</p>
 </section>
 </section>
