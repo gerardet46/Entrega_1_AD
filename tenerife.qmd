@@ -242,13 +242,7 @@ text(bp, nivells + 50, nivells)
 
 <<<<<<< HEAD
 =======
-<jct>Alerta, aquí estas fent conques, no lleres. Per sabre ses lleres amb més afluents has de mirar es camp cauce_nombre_phi (mira adalt on descriven ses variables, he afegit un paràgraf on s'explia. He comprovat amb es document aquell des noms i classificació i sí que quadra)</jct>
 
-```{r}
-freqüències = table(torrents$cuenca_principal_id)
-freqüències_ordenades = sort(freqüències,decreasing = TRUE)
-top_5_torrents = head(freqüències_ordenades,5)
-top_5_torrents #Aquests són els idprincipals dels torrents amb més afluents.
-suma_long2d = 0
-```
 >>>>>>> 534684a550aab82239410eeb8864c002e7dec7ed
+
+##Regresió
