@@ -124,7 +124,6 @@ window.Quarto = {
   <li><a href="#head" id="toc-head" class="nav-link" data-scroll-target="#head">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</a>
   <ul class="collapse">
   <li><a href="#regresió" id="toc-regresió" class="nav-link" data-scroll-target="#regresió">Regresió</a></li>
-  <li><a href="#regresió-1" id="toc-regresió-1" class="nav-link" data-scroll-target="#regresió-1">Regresió</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -561,12 +560,37 @@ Desviació típica    2023.422    2076.161</code></pre>
 </blockquote>
 <section id="regresió" class="level2">
 <h2 class="anchored" data-anchor-id="regresió">Regresió</h2>
-</section>
-<section id="regresió-1" class="level2">
-<h2 class="anchored" data-anchor-id="regresió-1">Regresió</h2>
 <p>Calcularem la recta de regresió on la variable independent sirà la longitud en 2d, i la variable dependent, sirà la longitud en 3 dimensions de la suma dels afluents.</p>
-<p>longituts_2d=torrents<span class="math inline">\(cauce_longitud_2d
-longituts_3d=torrents\)</span>cauce_longitud_3d plot(longituts_2d,longituts_3d,main = “Diagrama de dispersión”, xlab = “X”, ylab = “Y”, pch=19) # Ajustam el modelo de regresió lineal model &lt;- lm(longituts_3d ~ longituts_2d) plot(longituts_3d~longituts_2d, main = “Recta de Regresión Lineal”, xlab = “Longitud 2d”, ylab = “longitud 3d”,col=“blue”, pch = 19,data=faithful)+abline(model, col = “red”, lwd = 2,data=faithful) ```` Podem observar que les variables cauce_longitud_2d i cauce_longitud_3d estan molt ben ajustades per aquest model de regressió lineal.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>longituts_2d<span class="ot">=</span>torrents<span class="sc">$</span>cauce_longitud_2d</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>longituts_3d<span class="ot">=</span>torrents<span class="sc">$</span>cauce_longitud_3d</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(longituts_2d,longituts_3d,<span class="at">main =</span> <span class="st">"Diagrama de dispersión"</span>, <span class="at">xlab =</span> <span class="st">"X"</span>, <span class="at">ylab =</span> <span class="st">"Y"</span>, <span class="at">pch=</span><span class="dv">19</span>)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tenerife_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustam el modelo de regresió lineal</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(longituts_3d <span class="sc">~</span> longituts_2d)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(longituts_3d<span class="sc">~</span>longituts_2d, <span class="at">main =</span> <span class="st">"Recta de Regresión Lineal"</span>, <span class="at">xlab =</span> <span class="st">"Longitud 2d"</span>, <span class="at">ylab =</span> <span class="st">"longitud 3d"</span>,<span class="at">col=</span><span class="st">"blue"</span>, <span class="at">pch =</span> <span class="dv">19</span>,<span class="at">data=</span>faithful)<span class="sc">+</span><span class="fu">abline</span>(model, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>,<span class="at">data=</span>faithful)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): "data" is
+not a graphical parameter</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tenerife_files/figure-html/unnamed-chunk-14-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>integer(0)</code></pre>
+</div>
+</div>
+<p>Podem observar que les variables cauce_longitud_2d i cauce_longitud_3d estan molt ben ajustades per aquest model de regressió lineal.</p>
 <p>======= &gt;&gt;&gt;&gt;&gt;&gt;&gt; 3a2938773f67761739c67b43f0aa62845c7aa312</p>
 </section>
 </section>
