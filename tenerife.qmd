@@ -49,26 +49,24 @@ library(tidyverse)
 library(ggplot2)
 ```
 
-
 # Introducció i objectiu
-<todo>No mos hem d'oblidar d'això!!</todo>
 
-blablabla. Idea: comprovar si les longituds 2d i 3d segueixen la mateixa distribució
+El conjunt de dades escollit, [Cauces de la isla de Tenerife](https://datos.gob.es/es/catalogo/a05003638-cauces-de-la-isla-de-tenerife) (concretament, l'*inventario insular de cauces de Tenerife*), conté informació geogràfica sobre la classificació i nomenclatura de les lleres de Tenerife, així com la seva longitud i la conca a la qual hi pertanyen. Va ser actualitzada per darrera vegada el 31/08 d'aquest any.
+
+Les dades referents a la longitud de les dades apareix calculada sobre mapes 2d i sobre models 3d de l'illa. Així, posterior a l'anàlisi exploratòria de les dades podríem plantejar la pregunta de si els dos tipus de longituds registrats segueixen la mateixa distribució, en el sentit de si la raó entre la longitud 3d i la 2d és la mateixa.
 
 # Anàlisi exploratòria
 
 ## Càrrega de dades
 
-Carreguem el CSV a R, i comecem comentant les dades que hi apareixen.
+Carreguem el CSV a R, i comencem comentant les dades que hi apareixen.
 
 ```{r}
-rius = read.csv("inventario-insular-de-cauces-de-tenerife.csv")
-str(rius)
+torrents = read.csv("inventario-insular-de-cauces-de-tenerife.csv")
+str(torrents)
 ```
 
-Es pot consultar [aquesta web](https://datos.tenerife.es/es/datos/tablero?resourceId = f630dd85-9e4f-45f6-8bd4-212924a8a0b0) per entendre les variables.
-
-Les dades tracten sobre lleres de l'illa de Tenerife. Les variables que es contemplen són les que segueixen:
+Es pot consultar [aquesta web](https://datos.tenerife.es/es/datos/tablero?resourceId=f630dd85-9e4f-45f6-8bd4-212924a8a0b0) per entendre les variables. Aquestes són les que segueixen:
 
 -   **cauce_id**: de tipus qualitatiu, nombre que identifica unívocament cada una de les lleres registrades a l'illa.
 
@@ -78,31 +76,31 @@ Les dades tracten sobre lleres de l'illa de Tenerife. Les variables que es conte
 
 -   **cauce_nivel**: de tipus ordinal, s'utilitza per identificar i ordenar les diferents bifurcacions d'una mateixa llera segons el grau d'importància. El nivell 1 indica una llera principal, i nivells superiors són afluents dels nivells anteriors.
 
--   **cauce_orden**: de tipus ordinal, s'utilitza per ordenar les afluents d'una llera respecte del nivells anteriors. Un nombre '1xy' de nivell 3 indica que és l'afluent y de l'afluent x de la llera principal. En l'[Inventario oficial de cauces de la Demarcación Hidrpgráfica de Tenerife](https://www.aguastenerife.org/images/pdf/PHT1erCiclo/III-DocumentoGestionGobernanza/III-1-Normativa/III-1-2-Anejos/III-1-2-Anejo4-InventarioCauces.pdf) es pot consultar la jerarquia de totes les lleres.
+-   **cauce_orden**: de tipus ordinal, s'utilitza per ordenar les afluents d'una llera respecte del nivells anteriors. Un nombre '1xy' de nivell 3 indica que és l'afluent y de l'afluent x de la llera principal. En el [Inventario oficial de cauces de la Demarcación Hidrpgráfica de Tenerife](https://www.aguastenerife.org/images/pdf/PHT1erCiclo/III-DocumentoGestionGobernanza/III-1-Normativa/III-1-2-Anejos/III-1-2-Anejo4-InventarioCauces.pdf) es pot consultar la jerarquia de totes les lleres.
 
-Per exemple, si una llera té nivell 1 vol dir que és un dels rius principals de la conca; si d'un d'aquests torrents de nivell 1 llavors 11, 12, ..., 19, 1A són les bifurcacions d'aquella llera. Aquestes poden tenir altres bifurcacions, per exemple 111, 112, ... I així inductivament. Notem que la primera xifra sempre sirà 1 perquè comença a un torrent principal sempre. També cal explicar que podem tenir diversos afluents amb el mateix ordre, ja que el que els diferencia és l'id del corrent d'aigua principal (**cauce_principal_id**).
-Tots els afluents d'una llera contenen el mateix nom al camp **cauce_nombre_phi** i **cauce_rotulo_phi**, de manera que amb aquests camps podem vincular la llera principal amb els seus afluents.
+Per exemple, si una llera té nivell 1 vol dir que és un dels torrents principals de la conca; si d'un d'aquests torrents de nivell 1 llavors 11, 12, ..., 19, 1A són les bifurcacions d'aquella llera. Aquestes poden tenir altres bifurcacions, per exemple 111, 112, ... I així inductivament. Notem que la primera xifra serà 1 perquè sempre comença a un torrent principal. També cal explicar que podem tenir diversos afluents amb el mateix ordre, ja que el que els diferencia és l'id del corrent d'aigua principal (**cauce_principal_id**). Tots els afluents d'una llera contenen el mateix nom al camp **cauce_nombre_phi** i **cauce_rotulo_phi**, de manera que amb aquests camps podem vincular la llera principal amb els seus afluents.
 
-- **cauce_longitud_2d**: de tipus quantitatiu continu, és la mesura de la longitud de la llera en metres si fos mesurat sobre un mapa.
+-   **cauce_longitud_2d**: de tipus quantitatiu continu, és la mesura de la longitud de la llera en metres si fos mesurat sobre un mapa.
 
-- **cauce_longitud_3d**: de tipus quantitatiu continu, és la mesura de la longitud real del riu tenint en compte l'altitud (mesurat sobre un model digital del terreny).
+-   **cauce_longitud_3d**: de tipus quantitatiu continu, és la mesura de la longitud real de la llera en metres tenint en compte l'altitud (mesurat sobre un model digital del terreny).
 
-- **cuenca_principal_id**: de tipus qualitatiu, és un identificador de les conques de l'illa. Totes les lleres que desenboquen en una mateixa conca formen una xarxa.
+-   **cuenca_principal_id**: de tipus qualitatiu, és un identificador de les conques de l'illa. Totes les lleres que desenboquen en una mateixa conca formen una xarxa.
 
-- **cauce_nombre_phi**: de tipus qualitatiu, és el nom de llera que consta en el PHI (Plan Hidrológico Insular)
+-   **cauce_nombre_phi**: de tipus qualitatiu, és el nom de llera que consta en el PHI (Plan Hidrológico Insular)
 
-- **cauce_rotulo_phi**: de tipus qualitatiu, és el ròtul o nom que s'empra a la pràctica per etiquetar cada llera en el PHI.
+-   **cauce_rotulo_phi**: de tipus qualitatiu, és el ròtul o nom que s'empra a la pràctica per etiquetar cada llera en el PHI.
 
 ## Resum de les dades
+
 De manera senzilla, podem trobar la mitjana, la desviació típica i la variància dels dos tipus de longitud.
 
 ```{r}
-n       = nrow(rius)
-conques = length(table(rius$cuenca_principal_id))
-x2      = mean(rius$cauce_longitud_2d)
-x3      = mean(rius$cauce_longitud_3d)
-sd2_2d  = var(rius$cauce_longitud_2d)*(n-1)/n
-sd2_3d  = var(rius$cauce_longitud_3d)*(n-1)/n
+n       = nrow(torrents)
+conques = length(table(torrents$cuenca_principal_id))
+x2      = mean(torrents$cauce_longitud_2d)
+x3      = mean(torrents$cauce_longitud_3d)
+sd2_2d  = var(torrents$cauce_longitud_2d)*(n-1)/n
+sd2_3d  = var(torrents$cauce_longitud_3d)*(n-1)/n
 sd_2d   = sqrt(sd2_2d)
 sd_3d   = sqrt(sd2_3d)
 
@@ -110,7 +108,7 @@ resum = data.frame(c(x2, sd2_2d, sd_2d), c(x3, sd2_3d, sd_3d))
 colnames(resum) = c("2d", "3d")
 rownames(resum) = c("Mitjana", "Variança", "Desviació típica")
 
-cat(sprintf("Nombre de rius:    %d\nNombre de conques: %d", n, conques))
+cat(sprintf("Nombre de torrents: %d\nNombre de conques:  %d", n, conques))
 resum
 ```
 
@@ -119,16 +117,18 @@ resum
 Mostrem la distribució de les longituds en metres en 2d i en 3d superposades en un mateix gràfic.
 
 ```{r}
-plot(density(rius$cauce_longitud_2d), col = "blue", main="Longitud de les lleres", xlab="Longitud (m)", ylab="Densitat")
-lines(density(rius$cauce_longitud_3d), col = "red")
+plot(density(torrents$cauce_longitud_2d), col = "blue", main="Longitud de les lleres", xlab="Longitud (m)", ylab="Densitat")
+lines(density(torrents$cauce_longitud_3d), col = "red")
+legend("topright", legend = c("2d", "3d"), col= c("blue", "red"),lty = 1)
 ```
 
-Com que hi ha molt pocs rius que arribin al quilòmetre de llargària, visualitzarem millor la densitat si ens restringim a aquestes lleres.
+Com que hi ha molt pocs torrents que arribin al quilòmetre de llargària, visualitzarem millor la densitat si ens restringim a aquestes lleres.
 
 ```{r}
-sprintf("Rius de menys d'1km (en 2d): %g", sum(rius$cauce_longitud_2d < 1000))
-plot(density(rius$cauce_longitud_2d), col = "blue", main="Longitud de les lleres", xlab="Longitud (m)", ylab="Densitat", xlim=c(0,1000))
-lines(density(rius$cauce_longitud_3d), col = "red")
+sprintf("Torrents de menys d'1km (en 2d): %g", sum(torrents$cauce_longitud_2d < 1000))
+plot(density(torrents$cauce_longitud_2d), col = "blue", main="Longitud de les lleres", xlab="Longitud (m)", ylab="Densitat", xlim=c(0,1000))
+lines(density(torrents$cauce_longitud_3d), col = "red")
+legend("topright", legend = c("2d", "3d"), col= c("blue", "red"),lty = 1)
 ```
 Per seguir comparant el dos tipus de longituts, el que farem serà agafarles 5 lleres amb més afluents, i veure la relació d'aquestes dues longituts.
 
@@ -161,12 +161,15 @@ ggplot(datos_largo, aes(x = x, y = Longituts, fill = Tipus)) +
 Una altra classificació que pot interessar-nos és segons els nivells d'importància de les lleres. Podríem plantejar si els tipus de longitud s'avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació. 
 
 <gra>He llevat ses etiquetes des eixos, amb tants de gràfics crec que no fa falta; a més són gràfics de densitats</gra>
+=======
+Una altra classificació que pot interessar-nos és segons els nivells d'importància de les lleres. Podríem plantejar si els tipus de longitud s'avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació.
+>>>>>>> 534684a550aab82239410eeb8864c002e7dec7ed
 
 ```{r}
 par(mfrow = c(1, 2))
-for(i in 1:max(rius$cauce_nivel)) {
-  plot(density(subset(rius, cauce_nivel==i)$cauce_longitud_2d), col = "blue", main = paste("Longitud","nivell",i), xlab="", ylab="")
-  lines(density(subset(rius, cauce_nivel==i)$cauce_longitud_3d), col = "red")
+for(i in 1:max(torrents$cauce_nivel)) {
+  plot(density(subset(torrents, cauce_nivel==i)$cauce_longitud_2d), col = "blue", main = paste("Longitud","nivell",i), xlab="", ylab="")
+  lines(density(subset(torrents, cauce_nivel==i)$cauce_longitud_3d), col = "red")
   legend("topright", legend = c("2d", "3d"), col= c("blue", "red"),lty = 1)
 }
 ```
@@ -175,56 +178,45 @@ for(i in 1:max(rius$cauce_nivel)) {
 
 ## Longituds 2d i 3d relatives
 
-Vinculant els gràfics anteriors a la pregunta proposada, podem considerar la diferència relativa entre les longituds en cada llera, i visualitzar les densitats d'aquestes diferències per a cada nivell.
+Vinculant els gràfics anteriors a la pregunta proposada, podem considerar la diferència relativa entre les longituds en cada llera (això és $\frac{long\_3d - long\_2d}{long\_3d}$), i visualitzar les densitats d'aquestes diferències per a cada nivell.
 
 ```{r}
-rius$diferencia = (rius$cauce_longitud_3d - rius$cauce_longitud_2d)/rius$cauce_longitud_3d
+torrents$diferencia = (torrents$cauce_longitud_3d - torrents$cauce_longitud_2d)/torrents$cauce_longitud_3d
 par(mfrow = c(1, 2))
-for(i in 1:max(rius$cauce_nivel)) {
-  plot(density(subset(rius, cauce_nivel == i)$diferencia), col = "grey", main = paste("Diferència relativa nivell",i), xlim = c(0,0.5), xlab = "", ylab = "")
+for(i in 1:max(torrents$cauce_nivel)) {
+  plot(density(subset(torrents, cauce_nivel == i)$diferencia), col = "grey", main = paste("Diferència relativa nivell",i), xlim = c(0,0.5), xlab = "", ylab = "")
 }
 ```
 
-Podem fer-nos una idea de si la diferència entre les longituds 2d i 3d registrades és consistent. A partir de les conques principals, considerem l'acumulat de les longituds 2d i 3d de les lleres que hi desemboquen, i visualitzem l'error relatiu (això és $\frac{long\_3d - long\_2d}{long\_3d}$) entre dits valors. Entendrem per conques principals aquelles en què hi ha un major nombre de lleres que hi finalitzen.
+Podem fer-nos una idea de si la diferència entre les longituds 2d i 3d registrades és consistent. A partir de les conques principals, considerem l'acumulat de les longituds 2d i 3d de les lleres que hi ha a cada conca. A continuació, donam un gràfic amb les longituds acumulades 2d i 3d una devora l'altra i visualitzem l'error relatiu adalt entre dits valors. Entendrem per conques principals aquelles en què hi ha un major nombre de lleres que hi ha.
 
 ```{r}
 #Agrupam per nombre de conca, i acumulam valors de longituds
-df_2 <- rius %>%
+df_2 <- torrents %>%
     group_by(cuenca_principal_id) %>%
     summarise(cauce_longitud_2d = sum(cauce_longitud_2d), cauce_longitud_3d = sum(cauce_longitud_3d), count = n())
 #Ens quedam amb les 5 conques amb més lleres
 df_2 = df_2[order(df_2$count,decreasing = TRUE, na.last = FALSE),]
 df_2 = df_2[1:5,]
-
-#Diagrama de barres de la diferència relativa al total de longitud 3d. i.e (3d-2d)/3d
 df_2$dif_relativa = ((df_2$cauce_longitud_3d - df_2$cauce_longitud_2d) / df_2$cauce_longitud_3d)
 
-barplot(df_2$dif_relativa, beside = TRUE, names.arg = df_2$cuenca_principal_id,
-        xlab = 'id Conca', ylab = 'Error relatiu',ylim = c(0,max(df_2$dif_relativa)+0.01),
-        main = 'Diferència relativa de longituds acumulades')
-```
-
-
-<jct>Havia fet tb aquest gràfic, però amb so ser valors tan diferents entre conques quasi no s'aprecien bé ses diferències. Ho podem llevar, no?</jct>
-
-<gra>Que te pareix si mos quedam amb so de baix i posam adalt de cada barra s'error relatiu?</gra>
-```{r}
-# Create a matrix of the two columns to plot
+# Cream el gràfic, fent prèviament una matriu
 values <- as.matrix(df_2[, c('cauce_longitud_2d', 'cauce_longitud_3d')])
 
-# Create the barplot
-barplot(t(values), beside = TRUE, names.arg = df_2$cuenca_principal_id, col = c('blue', 'red'),
-        legend = c('Long 2d', 'Long 3d'), xlab = 'id Conca', ylab = 'Acumulat', 
-        main = 'Longituds acumulades per conques')
-
+b=barplot(t(values), beside = TRUE, names.arg = df_2$cuenca_principal_id, col = c('blue', 'red'),
+        legend = c('Long 2d', 'Long 3d'), ylim=c(0,max(values)+50000), xlab = 'id Conca', ylab = 'Acumulat', 
+        main = 'Longituds acumulades per conques + error relatiu')
+for (i in 1:nrow(df_2)) {
+  middle_pos <- mean(b[, i])  # Get the middle position of the pair of bars
+  max_height <- max(values[i, ])  # Find the maximum height of the pair of bars to place the label above
+  text(x = middle_pos, y = max_height + 15000, label = round(df_2$dif_relativa[i], digits = 3), cex = 0.8)
+}
 ```
+Un altre fet que pot resultar rellevant és identificar les lleres que tenen més afluents. Podem mostrar en un diagrama de barres les 10 més nombroses.
 
-## Recomptes
-
-Una informació que pot resultar rellevant és identificar les lleres que tenen més afluents. Podem mostrar en un diagrama de barres les 10 més nombroses.
 ```{r}
 #Agrupam segons el nom de la llera principal
-df_3 <- rius %>%
+df_3 <- torrents %>%
     group_by(cauce_rotulo_phi) %>%
     summarise(count = n())
 #Eliminam aquelles lleres que no tenen nom (que sempre són lleres principals i no tenen afluents), i ens quedam amb els 10 que en tenen més
@@ -239,11 +231,24 @@ text(bp, df_3$count, df_3$count, pos = 3, xpd = NA)
 
 ```
 
-També pot ser d'interès quants de rius hi ha per cada nivell.
+També pot ser d'interès saber quants de torrents hi ha per cada nivell.
+
 ```{r}
-nivells = as.matrix(count(rius, cauce_nivel)[2])
-bp = barplot(nivells, beside = T, ylim = c(0,max(nivells) + 100), space=0.1, xlab="Nivell", ylab="# Rius", names=seq(1:10), main = "Nombre de rius de cada nivell")
+nivells = as.matrix(count(torrents, cauce_nivel)[2])
+bp = barplot(nivells, beside = T, ylim = c(0,max(nivells) + 100), space=0.1, xlab="Nivell", ylab="# Torrents", names=seq(1:10), main = "Nombre de lleres de cada nivell")
 text(bp, nivells + 50, nivells)
 ```
 
 
+<<<<<<< HEAD
+=======
+<jct>Alerta, aquí estas fent conques, no lleres. Per sabre ses lleres amb més afluents has de mirar es camp cauce_nombre_phi (mira adalt on descriven ses variables, he afegit un paràgraf on s'explia. He comprovat amb es document aquell des noms i classificació i sí que quadra)</jct>
+
+```{r}
+freqüències = table(torrents$cuenca_principal_id)
+freqüències_ordenades = sort(freqüències,decreasing = TRUE)
+top_5_torrents = head(freqüències_ordenades,5)
+top_5_torrents #Aquests són els idprincipals dels torrents amb més afluents.
+suma_long2d = 0
+```
+>>>>>>> 534684a550aab82239410eeb8864c002e7dec7ed
