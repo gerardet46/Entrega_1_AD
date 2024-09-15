@@ -4,6 +4,8 @@ author: "Miquel Àngel Aguiló, Joan Camps, Gerard Ribas"
 lang: ca
 format:
   html:
+    toc: true
+    toc-expand: true
     theme: default
     #theme: darkly
 ---
@@ -49,6 +51,7 @@ library(ggplot2)
 
 
 # Introducció i objectiu
+<todo>No mos hem d'oblidar d'això!!</todo>
 
 blablabla. Idea: comprovar si les longituds 2d i 3d segueixen la mateixa distribució
 
@@ -90,11 +93,30 @@ Tots els afluents d'una llera contenen el mateix nom al camp **cauce_nombre_phi*
 
 - **cauce_rotulo_phi**: de tipus qualitatiu, és el ròtul o nom que s'empra a la pràctica per etiquetar cada llera en el PHI.
 
-## Longituds en 2D i en 3D globals
+## Resum de les dades
+De manera senzilla, podem trobar la mitjana, la desviació típica i la variància dels dos tipus de longitud.
 
-<todo> afegir llegenda, arreglar títols gràfiques, ... </todo>
+```{r}
+n       = nrow(rius)
+conques = length(table(rius$cuenca_principal_id))
+x2      = mean(rius$cauce_longitud_2d)
+x3      = mean(rius$cauce_longitud_3d)
+sd2_2d  = var(rius$cauce_longitud_2d)*(n-1)/n
+sd2_3d  = var(rius$cauce_longitud_3d)*(n-1)/n
+sd_2d   = sqrt(sd2_2d)
+sd_3d   = sqrt(sd2_3d)
 
-Mostrem la distribució de les longituds en metres en 2D i en 3D superposades en un mateix gràfic.
+resum = data.frame(c(x2, sd2_2d, sd_2d), c(x3, sd2_3d, sd_3d))
+colnames(resum) = c("2d", "3d")
+rownames(resum) = c("Mitjana", "Variança", "Desviació típica")
+
+cat(sprintf("Nombre de rius:    %d\nNombre de conques: %d", n, conques))
+resum
+```
+
+## Longituds en 2d i en 3d
+
+Mostrem la distribució de les longituds en metres en 2d i en 3d superposades en un mateix gràfic.
 
 ```{r}
 plot(density(rius$cauce_longitud_2d), col = "blue", main="Longitud de les lleres", xlab="Longitud (m)", ylab="Densitat")
@@ -109,8 +131,6 @@ plot(density(rius$cauce_longitud_2d), col = "blue", main="Longitud de les lleres
 lines(density(rius$cauce_longitud_3d), col = "red")
 ```
 
-<jct>Comença part Joan. Després ja ordenam document</jct>
-
 Una altra classificació que pot interessar-nos és segons els nivells d'importància de les lleres. Podríem plantejar si els tipus de longitud s'avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació. 
 
 <gra>He llevat ses etiquetes des eixos, amb tants de gràfics crec que no fa falta; a més són gràfics de densitats</gra>
@@ -124,6 +144,8 @@ for(i in 1:max(rius$cauce_nivel)) {
 }
 ```
 
+## Longituds 2d i 3d relatives
+
 Vinculant els gràfics anteriors a la pregunta proposada, podem considerar la diferència relativa entre les longituds en cada llera, i visualitzar les densitats d'aquestes diferències per a cada nivell.
 
 ```{r}
@@ -134,25 +156,7 @@ for(i in 1:max(rius$cauce_nivel)) {
 }
 ```
 
-
-De manera senzilla, podem trobar la mitjana, la desviació típica i la variància dels dos tipus de longitud.
-
-```{r}
-n = nrow(rius)
-x2 = mean(rius$cauce_longitud_2d)
-x3 = mean(rius$cauce_longitud_3d)
-sd2_2d = var(rius$cauce_longitud_2d)*(n-1)/n
-sd2_3d = var(rius$cauce_longitud_3d)*(n-1)/n
-sd_2d = sqrt(sd2_2d)
-sd_3d = sqrt(sd2_3d)
-
-resum = data.frame(c(x2, sd2_2d, sd_2d), c(x3, sd2_3d, sd_3d))
-colnames(resum) = c("2d", "3d")
-rownames(resum) = c("Mitjana", "Variança", "Desviació típica")
-resum
-```
-
-Podem fer-nos una idea de si la diferència entre les longituds 2d i 3d registrades és consistent. A partir de les conques principals, considerem l'acumulat de les longituds 2d i 3d de les lleres que hi desenboquen, i visualitzem l'error relatiu (això és $\frac{long\_3d - long\_2d}{long\_3d}$) entre dits valors. Entendrem per conques principals aquelles en què hi ha un major nombre de lleres que hi finalitzen.
+Podem fer-nos una idea de si la diferència entre les longituds 2d i 3d registrades és consistent. A partir de les conques principals, considerem l'acumulat de les longituds 2d i 3d de les lleres que hi desemboquen, i visualitzem l'error relatiu (això és $\frac{long\_3d - long\_2d}{long\_3d}$) entre dits valors. Entendrem per conques principals aquelles en què hi ha un major nombre de lleres que hi finalitzen.
 
 ```{r}
 #Agrupam per nombre de conca, i acumulam valors de longituds
@@ -167,19 +171,14 @@ df_2 = df_2[1:5,]
 df_2$dif_relativa = ((df_2$cauce_longitud_3d - df_2$cauce_longitud_2d) / df_2$cauce_longitud_3d)
 
 barplot(df_2$dif_relativa, beside = TRUE, names.arg = df_2$cuenca_principal_id,
-        xlab = 'id Conca', ylab = 'Error relatiu',ylim = c(0,1),
-        main = 'Diferència relativa de longituds acumulades')
-
-```
-Per apreciar-ho millor, restringim l'eix d'ordenades al valor màxim del gràfic.
-```{r}
-barplot(df_2$dif_relativa, beside = TRUE, names.arg = df_2$cuenca_principal_id,
         xlab = 'id Conca', ylab = 'Error relatiu',ylim = c(0,max(df_2$dif_relativa)+0.01),
         main = 'Diferència relativa de longituds acumulades')
 ```
 
 
 <jct>Havia fet tb aquest gràfic, però amb so ser valors tan diferents entre conques quasi no s'aprecien bé ses diferències. Ho podem llevar, no?</jct>
+
+<gra>Que te pareix si mos quedam amb so de baix i posam adalt de cada barra s'error relatiu?</gra>
 ```{r}
 # Create a matrix of the two columns to plot
 values <- as.matrix(df_2[, c('cauce_longitud_2d', 'cauce_longitud_3d')])
@@ -190,6 +189,8 @@ barplot(t(values), beside = TRUE, names.arg = df_2$cuenca_principal_id, col = c(
         main = 'Longituds acumulades per conques')
 
 ```
+
+## Recomptes
 
 Una informació que pot resultar rellevant és identificar les lleres que tenen més afluents. Podem mostrar en un diagrama de barres les 10 més nombroses.
 ```{r}
@@ -209,8 +210,12 @@ text(bp, df_3$count, df_3$count, pos = 3, xpd = NA)
 
 ```
 
-
-<jct>Fins aquí lo fet Joan. Després ja ordenam document</jct>
+També pot ser d'interès quants de rius hi ha per cada nivell.
+```{r}
+nivells = as.matrix(count(rius, cauce_nivel)[2])
+bp = barplot(nivells, beside = T, ylim = c(0,max(nivells) + 100), space=0.1, xlab="Nivell", ylab="# Rius", names=seq(1:10), main = "Nombre de rius de cada nivell")
+text(bp, nivells + 50, nivells)
+```
 
 Per seguir comparant el dos tipus de longituts, el que farem serà agafarles 5 lleres amb més afluents, i veure la relació d'aquestes dues longituts.
 
