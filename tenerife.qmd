@@ -82,7 +82,7 @@ Per exemple, si una llera té nivell 1 vol dir que és un dels torrents principa
 
 -   **cauce_longitud_2d**: de tipus quantitatiu continu, és la mesura de la longitud de la llera en metres si fos mesurat sobre un mapa.
 
--   **cauce_longitud_3d**: de tipus quantitatiu continu, és la mesura de la longitud real del riu en metres tenint en compte l'altitud (mesurat sobre un model digital del terreny).
+-   **cauce_longitud_3d**: de tipus quantitatiu continu, és la mesura de la longitud real de la llera en metres tenint en compte l'altitud (mesurat sobre un model digital del terreny).
 
 -   **cuenca_principal_id**: de tipus qualitatiu, és un identificador de les conques de l'illa. Totes les lleres que desenboquen en una mateixa conca formen una xarxa.
 
@@ -144,7 +144,7 @@ for(i in 1:max(torrents$cauce_nivel)) {
 
 ## Longituds 2d i 3d relatives
 
-Vinculant els gràfics anteriors a la pregunta proposada, podem considerar la diferència relativa entre les longituds en cada llera, i visualitzar les densitats d'aquestes diferències per a cada nivell.
+Vinculant els gràfics anteriors a la pregunta proposada, podem considerar la diferència relativa entre les longituds en cada llera (això és $\frac{long\_3d - long\_2d}{long\_3d}$), i visualitzar les densitats d'aquestes diferències per a cada nivell.
 
 ```{r}
 torrents$diferencia = (torrents$cauce_longitud_3d - torrents$cauce_longitud_2d)/torrents$cauce_longitud_3d
@@ -154,7 +154,7 @@ for(i in 1:max(torrents$cauce_nivel)) {
 }
 ```
 
-Podem fer-nos una idea de si la diferència entre les longituds 2d i 3d registrades és consistent. A partir de les conques principals, considerem l'acumulat de les longituds 2d i 3d de les lleres que hi ha a cada conca. A continuació, donam un gràfic amb les longituds acumulades 2d i 3d una devora l'altra i visualitzem l'error relatiu adalt (això és $\frac{long\_3d - long\_2d}{long\_3d}$) entre dits valors. Entendrem per conques principals aquelles en què hi ha un major nombre de lleres que hi ha.
+Podem fer-nos una idea de si la diferència entre les longituds 2d i 3d registrades és consistent. A partir de les conques principals, considerem l'acumulat de les longituds 2d i 3d de les lleres que hi ha a cada conca. A continuació, donam un gràfic amb les longituds acumulades 2d i 3d una devora l'altra i visualitzem l'error relatiu adalt entre dits valors. Entendrem per conques principals aquelles en què hi ha un major nombre de lleres que hi ha.
 
 ```{r}
 #Agrupam per nombre de conca, i acumulam valors de longituds
@@ -166,10 +166,9 @@ df_2 = df_2[order(df_2$count,decreasing = TRUE, na.last = FALSE),]
 df_2 = df_2[1:5,]
 df_2$dif_relativa = ((df_2$cauce_longitud_3d - df_2$cauce_longitud_2d) / df_2$cauce_longitud_3d)
 
-# Create a matrix of the two columns to plot
+# Cream el gràfic, fent prèviament una matriu
 values <- as.matrix(df_2[, c('cauce_longitud_2d', 'cauce_longitud_3d')])
 
-# Create the barplot
 b=barplot(t(values), beside = TRUE, names.arg = df_2$cuenca_principal_id, col = c('blue', 'red'),
         legend = c('Long 2d', 'Long 3d'), ylim=c(0,max(values)+50000), xlab = 'id Conca', ylab = 'Acumulat', 
         main = 'Longituds acumulades per conques + error relatiu')
