@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.45">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -34,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -69,7 +69,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="tenerife_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="tenerife_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -109,8 +109,7 @@ window.Quarto = {
     <h2 id="toc-title">Taula de continguts</h2>
    
   <ul>
-  <li><a href="#introducció-i-objectiu" id="toc-introducció-i-objectiu" class="nav-link active" data-scroll-target="#introducció-i-objectiu">Introducció i objectiu</a></li>
-  <li><a href="#anàlisi-exploratòria" id="toc-anàlisi-exploratòria" class="nav-link" data-scroll-target="#anàlisi-exploratòria">Anàlisi exploratòria</a>
+  <li><a href="#introducció-i-objectiu" id="toc-introducció-i-objectiu" class="nav-link active" data-scroll-target="#introducció-i-objectiu">Introducció i objectiu</a>
   <ul class="collapse">
   <li><a href="#càrrega-de-dades" id="toc-càrrega-de-dades" class="nav-link" data-scroll-target="#càrrega-de-dades">Càrrega de dades</a></li>
   <li><a href="#resum-de-les-dades" id="toc-resum-de-les-dades" class="nav-link" data-scroll-target="#resum-de-les-dades">Resum de les dades</a></li>
@@ -185,11 +184,8 @@ gra::after, jct::after, note::after, todo::after, maa:after {
 </div>
 <section id="introducció-i-objectiu" class="level1">
 <h1>Introducció i objectiu</h1>
-<p><todo>No mos hem d’oblidar d’això!!</todo></p>
-<p>blablabla. Idea: comprovar si les longituds 2d i 3d segueixen la mateixa distribució</p>
-</section>
-<section id="anàlisi-exploratòria" class="level1">
-<h1>Anàlisi exploratòria</h1>
+<p>El conjunt de dades escollit, <a href="https://datos.gob.es/es/catalogo/a05003638-cauces-de-la-isla-de-tenerife">Cauces de la isla de Tenerife</a> (concretament, l’<em>inventario insular de cauces de Tenerife</em>), conté informació geogràfica sobre la classificació i nomenclatura de les lleres de Tenerife, així com la seva longitud i la conca on desenboquen. Va ser actualitzada per darrera vegada el 31/08 d’aquest any.</p>
+<p>Les dades referents a la longitud de les dades apareix calculada sobre mapes 2d i sobre models 3d de l’illa. Així, posterior a l’anàlisi exploratòria de les dades podríem plantejar la pregunta de si els dos tipus de longituds registrats segueixen la mateixa distribució. # Anàlisi exploratòria</p>
 <section id="càrrega-de-dades" class="level2">
 <h2 class="anchored" data-anchor-id="càrrega-de-dades">Càrrega de dades</h2>
 <p>Carreguem el CSV a R, i comecem comentant les dades que hi apareixen.</p>
@@ -210,8 +206,7 @@ gra::after, jct::after, note::after, todo::after, maa:after {
  $ cauce_rotulo_phi   : chr  "Bco. de Flandes" "Bco. de Flandes" "Bco. de Flandes" "Bco. de Flandes" ...</code></pre>
 </div>
 </div>
-<p>Es pot consultar <a href="https://datos.tenerife.es/es/datos/tablero?resourceId%20=%20f630dd85-9e4f-45f6-8bd4-212924a8a0b0">aquesta web</a> per entendre les variables.</p>
-<p>Les dades tracten sobre lleres de l’illa de Tenerife. Les variables que es contemplen són les que segueixen:</p>
+<p>Es pot consultar <a href="https://datos.tenerife.es/es/datos/tablero?resourceId%20=%20f630dd85-9e4f-45f6-8bd4-212924a8a0b0">aquesta web</a> per entendre les variables. Aquestes són les que segueixen:</p>
 <ul>
 <li><p><strong>cauce_id</strong>: de tipus qualitatiu, nombre que identifica unívocament cada una de les lleres registrades a l’illa.</p></li>
 <li><p><strong>cauce_toponimos</strong>: de tipus qualitatiu, es refereix al nom donat a la llera.</p></li>
@@ -219,10 +214,10 @@ gra::after, jct::after, note::after, todo::after, maa:after {
 <li><p><strong>cauce_nivel</strong>: de tipus ordinal, s’utilitza per identificar i ordenar les diferents bifurcacions d’una mateixa llera segons el grau d’importància. El nivell 1 indica una llera principal, i nivells superiors són afluents dels nivells anteriors.</p></li>
 <li><p><strong>cauce_orden</strong>: de tipus ordinal, s’utilitza per ordenar les afluents d’una llera respecte del nivells anteriors. Un nombre ‘1xy’ de nivell 3 indica que és l’afluent y de l’afluent x de la llera principal. En l’<a href="https://www.aguastenerife.org/images/pdf/PHT1erCiclo/III-DocumentoGestionGobernanza/III-1-Normativa/III-1-2-Anejos/III-1-2-Anejo4-InventarioCauces.pdf">Inventario oficial de cauces de la Demarcación Hidrpgráfica de Tenerife</a> es pot consultar la jerarquia de totes les lleres.</p></li>
 </ul>
-<p>Per exemple, si una llera té nivell 1 vol dir que és un dels rius principals de la conca; si d’un d’aquests torrents de nivell 1 llavors 11, 12, …, 19, 1A són les bifurcacions d’aquella llera. Aquestes poden tenir altres bifurcacions, per exemple 111, 112, … I així inductivament. Notem que la primera xifra sempre sirà 1 perquè comença a un torrent principal sempre. També cal explicar que podem tenir diversos afluents amb el mateix ordre, ja que el que els diferencia és l’id del corrent d’aigua principal (<strong>cauce_principal_id</strong>). Tots els afluents d’una llera contenen el mateix nom al camp <strong>cauce_nombre_phi</strong> i <strong>cauce_rotulo_phi</strong>, de manera que amb aquests camps podem vincular la llera principal amb els seus afluents.</p>
+<p>Per exemple, si una llera té nivell 1 vol dir que és un dels torrents principals de la conca; si d’un d’aquests torrents de nivell 1 llavors 11, 12, …, 19, 1A són les bifurcacions d’aquella llera. Aquestes poden tenir altres bifurcacions, per exemple 111, 112, … I així inductivament. Notem que la primera xifra serà 1 perquè sempre comença a un torrent principal. També cal explicar que podem tenir diversos afluents amb el mateix ordre, ja que el que els diferencia és l’id del corrent d’aigua principal (<strong>cauce_principal_id</strong>). Tots els afluents d’una llera contenen el mateix nom al camp <strong>cauce_nombre_phi</strong> i <strong>cauce_rotulo_phi</strong>, de manera que amb aquests camps podem vincular la llera principal amb els seus afluents.</p>
 <ul>
 <li><p><strong>cauce_longitud_2d</strong>: de tipus quantitatiu continu, és la mesura de la longitud de la llera en metres si fos mesurat sobre un mapa.</p></li>
-<li><p><strong>cauce_longitud_3d</strong>: de tipus quantitatiu continu, és la mesura de la longitud real del riu tenint en compte l’altitud (mesurat sobre un model digital del terreny).</p></li>
+<li><p><strong>cauce_longitud_3d</strong>: de tipus quantitatiu continu, és la mesura de la longitud real del riu en metres tenint en compte l’altitud (mesurat sobre un model digital del terreny).</p></li>
 <li><p><strong>cuenca_principal_id</strong>: de tipus qualitatiu, és un identificador de les conques de l’illa. Totes les lleres que desenboquen en una mateixa conca formen una xarxa.</p></li>
 <li><p><strong>cauce_nombre_phi</strong>: de tipus qualitatiu, és el nom de llera que consta en el PHI (Plan Hidrológico Insular)</p></li>
 <li><p><strong>cauce_rotulo_phi</strong>: de tipus qualitatiu, és el ròtul o nom que s’empra a la pràctica per etiquetar cada llera en el PHI.</p></li>
@@ -273,7 +268,7 @@ Desviació típica    2023.422    2076.161</code></pre>
 </div>
 </div>
 </div>
-<p>Com que hi ha molt pocs rius que arribin al quilòmetre de llargària, visualitzarem millor la densitat si ens restringim a aquestes lleres.</p>
+<p>Com que hi ha molt pocs torrents que arribin al quilòmetre de llargària, visualitzarem millor la densitat si ens restringim a aquestes lleres.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sprintf</span>(<span class="st">"Rius de menys d'1km (en 2d): %g"</span>, <span class="fu">sum</span>(rius<span class="sc">$</span>cauce_longitud_2d <span class="sc">&lt;</span> <span class="dv">1000</span>))</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -411,9 +406,14 @@ Desviació típica    2023.422    2076.161</code></pre>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>values <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(df_2[, <span class="fu">c</span>(<span class="st">'cauce_longitud_2d'</span>, <span class="st">'cauce_longitud_3d'</span>)])</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the barplot</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(<span class="fu">t</span>(values), <span class="at">beside =</span> <span class="cn">TRUE</span>, <span class="at">names.arg =</span> df_2<span class="sc">$</span>cuenca_principal_id, <span class="at">col =</span> <span class="fu">c</span>(<span class="st">'blue'</span>, <span class="st">'red'</span>),</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">'Long 2d'</span>, <span class="st">'Long 3d'</span>), <span class="at">xlab =</span> <span class="st">'id Conca'</span>, <span class="at">ylab =</span> <span class="st">'Acumulat'</span>, </span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">'Longituds acumulades per conques'</span>)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>b<span class="ot">=</span><span class="fu">barplot</span>(<span class="fu">t</span>(values), <span class="at">beside =</span> <span class="cn">TRUE</span>, <span class="at">names.arg =</span> df_2<span class="sc">$</span>cuenca_principal_id, <span class="at">col =</span> <span class="fu">c</span>(<span class="st">'blue'</span>, <span class="st">'red'</span>),</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">'Long 2d'</span>, <span class="st">'Long 3d'</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fu">max</span>(values)<span class="sc">+</span><span class="dv">50000</span>), <span class="at">xlab =</span> <span class="st">'id Conca'</span>, <span class="at">ylab =</span> <span class="st">'Acumulat'</span>, </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">'Longituds acumulades per conques + error relatiu'</span>)</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df_2)) {</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  middle_pos <span class="ot">&lt;-</span> <span class="fu">mean</span>(b[, i])  <span class="co"># Get the middle position of the pair of bars</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  max_height <span class="ot">&lt;-</span> <span class="fu">max</span>(values[i, ])  <span class="co"># Find the maximum height of the pair of bars to place the label above</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="at">x =</span> middle_pos, <span class="at">y =</span> max_height <span class="sc">+</span> <span class="dv">15000</span>, <span class="at">label =</span> <span class="fu">round</span>(df_2<span class="sc">$</span>dif_relativa[i], <span class="at">digits =</span> <span class="dv">3</span>), <span class="at">cex =</span> <span class="fl">0.8</span>)</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -448,10 +448,10 @@ Desviació típica    2023.422    2076.161</code></pre>
 </div>
 </div>
 </div>
-<p>També pot ser d’interès quants de rius hi ha per cada nivell.</p>
+<p>També pot ser d’interès sabre quants de rius hi ha per cada nivell.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>nivells <span class="ot">=</span> <span class="fu">as.matrix</span>(<span class="fu">count</span>(rius, cauce_nivel)[<span class="dv">2</span>])</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>bp <span class="ot">=</span> <span class="fu">barplot</span>(nivells, <span class="at">beside =</span> T, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fu">max</span>(nivells) <span class="sc">+</span> <span class="dv">100</span>), <span class="at">space=</span><span class="fl">0.1</span>, <span class="at">xlab=</span><span class="st">"Nivell"</span>, <span class="at">ylab=</span><span class="st">"# Rius"</span>, <span class="at">names=</span><span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>), <span class="at">main =</span> <span class="st">"Nombre de rius de cada nivell"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>bp <span class="ot">=</span> <span class="fu">barplot</span>(nivells, <span class="at">beside =</span> T, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fu">max</span>(nivells) <span class="sc">+</span> <span class="dv">100</span>), <span class="at">space=</span><span class="fl">0.1</span>, <span class="at">xlab=</span><span class="st">"Nivell"</span>, <span class="at">ylab=</span><span class="st">"# Rius"</span>, <span class="at">names=</span><span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>), <span class="at">main =</span> <span class="st">"Nombre de lleres de cada nivell"</span>)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(bp, nivells <span class="sc">+</span> <span class="dv">50</span>, nivells)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
@@ -515,7 +515,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const onCopySuccess = function(e) {
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -547,29 +558,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
-  }
-  const getTextToCopy = function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-    text: getTextToCopy
   });
-  clipboard.on('success', onCopySuccess);
-  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
-    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-      text: getTextToCopy,
-      container: window.document.getElementById('quarto-embedded-source-code-modal')
-    });
-    clipboardModal.on('success', onCopySuccess);
-  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -577,7 +566,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
