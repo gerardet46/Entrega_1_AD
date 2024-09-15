@@ -158,6 +158,7 @@ ggplot(datos_largo, aes(x = x, y = Longituts, fill = Tipus)) +
   theme_minimal()
 
 ```
+<<<<<<< HEAD
 Una altra classificació que pot interessar-nos és segons els nivells d'importància de les lleres. Podríem plantejar si els tipus de longitud s'avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació. 
 
 <gra>He llevat ses etiquetes des eixos, amb tants de gràfics crec que no fa falta; a més són gràfics de densitats</gra>
@@ -245,4 +246,6 @@ text(bp, nivells + 50, nivells)
 
 >>>>>>> 534684a550aab82239410eeb8864c002e7dec7ed
 
-##Regresió
+## Regresió
+
+Calcularem la recta de regresió on la variable independent sir
