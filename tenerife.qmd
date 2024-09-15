@@ -130,7 +130,34 @@ sprintf("Rius de menys d'1km (en 2d): %g", sum(rius$cauce_longitud_2d < 1000))
 plot(density(rius$cauce_longitud_2d), col = "blue", main="Longitud de les lleres", xlab="Longitud (m)", ylab="Densitat", xlim=c(0,1000))
 lines(density(rius$cauce_longitud_3d), col = "red")
 ```
+Per seguir comparant el dos tipus de longituts, el que farem serà agafarles 5 lleres amb més afluents, i veure la relació d'aquestes dues longituts.
 
+```{r}
+freqüències = table(rius$cauce_nombre_phi[rius$cauce_nombre_phi!=" "])
+freqüències_ordenades = sort(freqüències,decreasing = TRUE)
+top_5_rius = head(freqüències_ordenades,5)  #Aquests són els idprincipals dels rius amb més afluents.
+valores_top_5 <- names(top_5_rius)
+suma_long2d = c(0,0,0,0,0)
+suma_long3d = c(0,0,0,0,0)
+for (i in 0:5) {
+  suma_long2d[i] = sum(rius$cauce_longitud_2d[rius$cauce_nombre_phi==valores_top_5[i]])
+}
+for (i in 0:5) {
+  suma_long3d[i] = sum(rius$cauce_longitud_3d[rius$cauce_nombre_phi==valores_top_5[i]])
+}
+x=c("1r","2n","3r","4t","5è")
+dades=data.frame(x,suma_long2d,suma_long3d)
+matriu_valors <- as.matrix(dades[, c("suma_long2d", "suma_long3d")])
+library(tidyr)
+library(ggplot2)
+datos_largo <- pivot_longer(dades, cols = suma_long3d:suma_long2d, names_to = "Tipus", values_to = "Longituts")
+ggplot(datos_largo, aes(x = x, y = Longituts, fill = Tipus)) +
+  geom_bar(stat = "identity", position = "identity", alpha = 0.6) +
+  labs(title = "Longituts de les 5 lleres amb més afluents", x = "Lleres", y = "Longituts") +
+  scale_fill_manual(values = c( "black", "skyblue")) +  # Colores para las barras
+  theme_minimal()
+
+```
 Una altra classificació que pot interessar-nos és segons els nivells d'importància de les lleres. Podríem plantejar si els tipus de longitud s'avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació. 
 
 <gra>He llevat ses etiquetes des eixos, amb tants de gràfics crec que no fa falta; a més són gràfics de densitats</gra>
@@ -142,6 +169,35 @@ for(i in 1:max(rius$cauce_nivel)) {
   lines(density(subset(rius, cauce_nivel==i)$cauce_longitud_3d), col = "red")
   legend("topright", legend = c("2d", "3d"), col= c("blue", "red"),lty = 1)
 }
+```
+
+Per seguir comparant el dos tipus de longituts, el que farem serà agafarles 5 lleres amb més afluents, i veure la relació d'aquestes dues longituts.
+
+```{r}
+freqüències = table(rius$cauce_nombre_phi[rius$cauce_nombre_phi!=" "])
+freqüències_ordenades = sort(freqüències,decreasing = TRUE)
+top_5_rius = head(freqüències_ordenades,5)  #Aquests són els idprincipals dels rius amb més afluents.
+valores_top_5 <- names(top_5_rius)
+suma_long2d = c(0,0,0,0,0)
+suma_long3d = c(0,0,0,0,0)
+for (i in 0:5) {
+  suma_long2d[i] = sum(rius$cauce_longitud_2d[rius$cauce_nombre_phi==valores_top_5[i]])
+}
+for (i in 0:5) {
+  suma_long3d[i] = sum(rius$cauce_longitud_3d[rius$cauce_nombre_phi==valores_top_5[i]])
+}
+x=c("1r","2n","3r","4t","5è")
+dades=data.frame(x,suma_long2d,suma_long3d)
+matriu_valors <- as.matrix(dades[, c("suma_long2d", "suma_long3d")])
+library(tidyr)
+library(ggplot2)
+datos_largo <- pivot_longer(dades, cols = suma_long3d:suma_long2d, names_to = "Tipus", values_to = "Longituts")
+ggplot(datos_largo, aes(x = x, y = Longituts, fill = Tipus)) +
+  geom_bar(stat = "identity", position = "identity", alpha = 0.6) +
+  labs(title = "Longituts de les 5 lleres amb més afluents", x = "Lleres", y = "Longituts") +
+  scale_fill_manual(values = c( "black", "skyblue")) +  # Colores para las barras
+  theme_minimal()
+
 ```
 
 ## Longituds 2d i 3d relatives
@@ -217,13 +273,4 @@ bp = barplot(nivells, beside = T, ylim = c(0,max(nivells) + 100), space=0.1, xla
 text(bp, nivells + 50, nivells)
 ```
 
-Per seguir comparant el dos tipus de longituts, el que farem serà agafarles 5 lleres amb més afluents, i veure la relació d'aquestes dues longituts.
 
-<jct>Alerta, aquí estas fent conques, no lleres. Per sabre ses lleres amb més afluents has de mirar es camp cauce_nombre_phi (mira adalt on descriven ses variables, he afegit un paràgraf on s'explia. He comprovat amb es document aquell des noms i classificació i sí que quadra)</jct>
-```{r}
-freqüències = table(rius$cuenca_principal_id)
-freqüències_ordenades = sort(freqüències,decreasing = TRUE)
-top_5_rius = head(freqüències_ordenades,5)
-top_5_rius #Aquests són els idprincipals dels rius amb més afluents.
-suma_long2d = 0
-```
