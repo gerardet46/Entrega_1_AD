@@ -130,40 +130,8 @@ plot(density(torrents$cauce_longitud_2d), col = "blue", main="Longitud de les ll
 lines(density(torrents$cauce_longitud_3d), col = "red")
 legend("topright", legend = c("2d", "3d"), col= c("blue", "red"),lty = 1)
 ```
-Per seguir comparant el dos tipus de longituts, el que farem serà agafarles 5 lleres amb més afluents, i veure la relació d'aquestes dues longituts.
 
-```{r}
-freqüències = table(rius$cauce_nombre_phi[rius$cauce_nombre_phi!=" "])
-freqüències_ordenades = sort(freqüències,decreasing = TRUE)
-top_5_rius = head(freqüències_ordenades,5)  #Aquests són els idprincipals dels rius amb més afluents.
-valores_top_5 <- names(top_5_rius)
-suma_long2d = c(0,0,0,0,0)
-suma_long3d = c(0,0,0,0,0)
-for (i in 0:5) {
-  suma_long2d[i] = sum(rius$cauce_longitud_2d[rius$cauce_nombre_phi==valores_top_5[i]])
-}
-for (i in 0:5) {
-  suma_long3d[i] = sum(rius$cauce_longitud_3d[rius$cauce_nombre_phi==valores_top_5[i]])
-}
-x=c("1r","2n","3r","4t","5è")
-dades=data.frame(x,suma_long2d,suma_long3d)
-matriu_valors <- as.matrix(dades[, c("suma_long2d", "suma_long3d")])
-library(tidyr)
-library(ggplot2)
-datos_largo <- pivot_longer(dades, cols = suma_long3d:suma_long2d, names_to = "Tipus", values_to = "Longituts")
-ggplot(datos_largo, aes(x = x, y = Longituts, fill = Tipus)) +
-  geom_bar(stat = "identity", position = "identity", alpha = 0.6) +
-  labs(title = "Longituts de les 5 lleres amb més afluents", x = "Lleres", y = "Longituts") +
-  scale_fill_manual(values = c( "black", "skyblue")) +  # Colores para las barras
-  theme_minimal()
-
-```
-Una altra classificació que pot interessar-nos és segons els nivells d'importància de les lleres. Podríem plantejar si els tipus de longitud s'avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació. 
-
-<gra>He llevat ses etiquetes des eixos, amb tants de gràfics crec que no fa falta; a més són gràfics de densitats</gra>
-=======
 Una altra classificació que pot interessar-nos és segons els nivells d'importància de les lleres. Podríem plantejar si els tipus de longitud s'avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació.
->>>>>>> 534684a550aab82239410eeb8864c002e7dec7ed
 
 ```{r}
 par(mfrow = c(1, 2))
@@ -173,7 +141,34 @@ for(i in 1:max(torrents$cauce_nivel)) {
   legend("topright", legend = c("2d", "3d"), col= c("blue", "red"),lty = 1)
 }
 ```
+Per seguir comparant el dos tipus de longituds, prendrem les 5 lleres amb més afluents i compararem les longituds totals de tots els seus afluents.
 
+```{r}
+frequencies = table(torrents$cauce_nombre_phi[torrents$cauce_nombre_phi!=" "])
+frequencies_ordenades = sort(frequencies,decreasing = TRUE)
+top_5_rius = head(frequencies_ordenades,5)  #Aquests són els idprincipals dels rius amb més afluents.
+valores_top_5 <- names(top_5_rius)
+suma_long2d = c(0,0,0,0,0)
+suma_long3d = c(0,0,0,0,0)
+for (i in 0:5) {
+  suma_long2d[i] = sum(torrents$cauce_longitud_2d[torrents$cauce_nombre_phi==valores_top_5[i]])
+}
+for (i in 0:5) {
+  suma_long3d[i] = sum(torrents$cauce_longitud_3d[torrents$cauce_nombre_phi==valores_top_5[i]])
+}
+x=c("1r","2n","3r","4t","5è")
+dades=data.frame(x,suma_long2d,suma_long3d)
+matriu_valors <- as.matrix(dades[, c("suma_long2d", "suma_long3d")])
+library(tidyr)
+library(ggplot2)
+datos_largo <- pivot_longer(dades, cols = suma_long3d:suma_long2d, names_to = "Tipus", values_to = "Longituds")
+ggplot(datos_largo, aes(x = x, y = Longituds, fill = Tipus)) +
+  geom_bar(stat = "identity", position = "identity", alpha = 0.6) +
+  labs(title = "Longituds de les 5 lleres amb més afluents", x = "Ordenació llera segons afluents", y = "Longitud acumulada afluents") +
+  scale_fill_manual(values = c( "blue", "red")) +
+  theme_minimal()
+
+```
 
 
 ## Longituds 2d i 3d relatives
@@ -212,7 +207,8 @@ for (i in 1:nrow(df_2)) {
   text(x = middle_pos, y = max_height + 15000, label = round(df_2$dif_relativa[i], digits = 3), cex = 0.8)
 }
 ```
-Un altre fet que pot resultar rellevant és identificar les lleres que tenen més afluents. Podem mostrar en un diagrama de barres les 10 més nombroses.
+## Còmput de lleres
+Un altre fet que pot resultar rellevant és comptabilitzar els tipus de lleres segons distintes clasificacions. Per exemple, podem identificar les lleres que tenen més afluents.Mostrem en un diagrama de barres les 10 més nombroses.
 
 ```{r}
 #Agrupam segons el nom de la llera principal
@@ -238,11 +234,3 @@ nivells = as.matrix(count(torrents, cauce_nivel)[2])
 bp = barplot(nivells, beside = T, ylim = c(0,max(nivells) + 100), space=0.1, xlab="Nivell", ylab="# Torrents", names=seq(1:10), main = "Nombre de lleres de cada nivell")
 text(bp, nivells + 50, nivells)
 ```
-
-
-<<<<<<< HEAD
-=======
-
->>>>>>> 534684a550aab82239410eeb8864c002e7dec7ed
-
-##Regresió
