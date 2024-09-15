@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.5.45">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -34,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -69,7 +69,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="tenerife_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="tenerife_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -109,13 +109,13 @@ window.Quarto = {
     <h2 id="toc-title">Taula de continguts</h2>
    
   <ul>
-  <li><a href="#introducció-i-objectiu" id="toc-introducció-i-objectiu" class="nav-link active" data-scroll-target="#introducció-i-objectiu">Introducció i objectiu</a>
+  <li><a href="#introducció-i-objectiu" id="toc-introducció-i-objectiu" class="nav-link active" data-scroll-target="#introducció-i-objectiu">Introducció i objectiu</a></li>
+  <li><a href="#anàlisi-exploratòria" id="toc-anàlisi-exploratòria" class="nav-link" data-scroll-target="#anàlisi-exploratòria">Anàlisi exploratòria</a>
   <ul class="collapse">
   <li><a href="#càrrega-de-dades" id="toc-càrrega-de-dades" class="nav-link" data-scroll-target="#càrrega-de-dades">Càrrega de dades</a></li>
   <li><a href="#resum-de-les-dades" id="toc-resum-de-les-dades" class="nav-link" data-scroll-target="#resum-de-les-dades">Resum de les dades</a></li>
   <li><a href="#longituds-en-2d-i-en-3d" id="toc-longituds-en-2d-i-en-3d" class="nav-link" data-scroll-target="#longituds-en-2d-i-en-3d">Longituds en 2d i en 3d</a></li>
   <li><a href="#longituds-2d-i-3d-relatives" id="toc-longituds-2d-i-3d-relatives" class="nav-link" data-scroll-target="#longituds-2d-i-3d-relatives">Longituds 2d i 3d relatives</a></li>
-  <li><a href="#recomptes" id="toc-recomptes" class="nav-link" data-scroll-target="#recomptes">Recomptes</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -184,14 +184,17 @@ gra::after, jct::after, note::after, todo::after, maa:after {
 </div>
 <section id="introducció-i-objectiu" class="level1">
 <h1>Introducció i objectiu</h1>
-<p>El conjunt de dades escollit, <a href="https://datos.gob.es/es/catalogo/a05003638-cauces-de-la-isla-de-tenerife">Cauces de la isla de Tenerife</a> (concretament, l’<em>inventario insular de cauces de Tenerife</em>), conté informació geogràfica sobre la classificació i nomenclatura de les lleres de Tenerife, així com la seva longitud i la conca on desenboquen. Va ser actualitzada per darrera vegada el 31/08 d’aquest any.</p>
-<p>Les dades referents a la longitud de les dades apareix calculada sobre mapes 2d i sobre models 3d de l’illa. Així, posterior a l’anàlisi exploratòria de les dades podríem plantejar la pregunta de si els dos tipus de longituds registrats segueixen la mateixa distribució. # Anàlisi exploratòria</p>
+<p>El conjunt de dades escollit, <a href="https://datos.gob.es/es/catalogo/a05003638-cauces-de-la-isla-de-tenerife">Cauces de la isla de Tenerife</a> (concretament, l’<em>inventario insular de cauces de Tenerife</em>), conté informació geogràfica sobre la classificació i nomenclatura de les lleres de Tenerife, així com la seva longitud i la conca a la qual hi pertanyen. Va ser actualitzada per darrera vegada el 31/08 d’aquest any.</p>
+<p>Les dades referents a la longitud de les dades apareix calculada sobre mapes 2d i sobre models 3d de l’illa. Així, posterior a l’anàlisi exploratòria de les dades podríem plantejar la pregunta de si els dos tipus de longituds registrats segueixen la mateixa distribució, en el sentit de si la raó entre la longitud 3d i la 2d és la mateixa.</p>
+</section>
+<section id="anàlisi-exploratòria" class="level1">
+<h1>Anàlisi exploratòria</h1>
 <section id="càrrega-de-dades" class="level2">
 <h2 class="anchored" data-anchor-id="càrrega-de-dades">Càrrega de dades</h2>
-<p>Carreguem el CSV a R, i comecem comentant les dades que hi apareixen.</p>
+<p>Carreguem el CSV a R, i comencem comentant les dades que hi apareixen.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rius <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"inventario-insular-de-cauces-de-tenerife.csv"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(rius)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>torrents <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"inventario-insular-de-cauces-de-tenerife.csv"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(torrents)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>'data.frame':   5497 obs. of  10 variables:
  $ cauce_id           : int  438 439 440 441 442 443 444 445 446 447 ...
@@ -206,13 +209,13 @@ gra::after, jct::after, note::after, todo::after, maa:after {
  $ cauce_rotulo_phi   : chr  "Bco. de Flandes" "Bco. de Flandes" "Bco. de Flandes" "Bco. de Flandes" ...</code></pre>
 </div>
 </div>
-<p>Es pot consultar <a href="https://datos.tenerife.es/es/datos/tablero?resourceId%20=%20f630dd85-9e4f-45f6-8bd4-212924a8a0b0">aquesta web</a> per entendre les variables. Aquestes són les que segueixen:</p>
+<p>Es pot consultar <a href="https://datos.tenerife.es/es/datos/tablero?resourceId=f630dd85-9e4f-45f6-8bd4-212924a8a0b0">aquesta web</a> per entendre les variables. Aquestes són les que segueixen:</p>
 <ul>
 <li><p><strong>cauce_id</strong>: de tipus qualitatiu, nombre que identifica unívocament cada una de les lleres registrades a l’illa.</p></li>
 <li><p><strong>cauce_toponimos</strong>: de tipus qualitatiu, es refereix al nom donat a la llera.</p></li>
 <li><p><strong>cacue_alonimos</strong>: de tipus qualitatiu, es refereix a una possible variant del nom expressat a la variable anterior per referir-se a la mateixa llera.</p></li>
 <li><p><strong>cauce_nivel</strong>: de tipus ordinal, s’utilitza per identificar i ordenar les diferents bifurcacions d’una mateixa llera segons el grau d’importància. El nivell 1 indica una llera principal, i nivells superiors són afluents dels nivells anteriors.</p></li>
-<li><p><strong>cauce_orden</strong>: de tipus ordinal, s’utilitza per ordenar les afluents d’una llera respecte del nivells anteriors. Un nombre ‘1xy’ de nivell 3 indica que és l’afluent y de l’afluent x de la llera principal. En l’<a href="https://www.aguastenerife.org/images/pdf/PHT1erCiclo/III-DocumentoGestionGobernanza/III-1-Normativa/III-1-2-Anejos/III-1-2-Anejo4-InventarioCauces.pdf">Inventario oficial de cauces de la Demarcación Hidrpgráfica de Tenerife</a> es pot consultar la jerarquia de totes les lleres.</p></li>
+<li><p><strong>cauce_orden</strong>: de tipus ordinal, s’utilitza per ordenar les afluents d’una llera respecte del nivells anteriors. Un nombre ‘1xy’ de nivell 3 indica que és l’afluent y de l’afluent x de la llera principal. En el <a href="https://www.aguastenerife.org/images/pdf/PHT1erCiclo/III-DocumentoGestionGobernanza/III-1-Normativa/III-1-2-Anejos/III-1-2-Anejo4-InventarioCauces.pdf">Inventario oficial de cauces de la Demarcación Hidrpgráfica de Tenerife</a> es pot consultar la jerarquia de totes les lleres.</p></li>
 </ul>
 <p>Per exemple, si una llera té nivell 1 vol dir que és un dels torrents principals de la conca; si d’un d’aquests torrents de nivell 1 llavors 11, 12, …, 19, 1A són les bifurcacions d’aquella llera. Aquestes poden tenir altres bifurcacions, per exemple 111, 112, … I així inductivament. Notem que la primera xifra serà 1 perquè sempre comença a un torrent principal. També cal explicar que podem tenir diversos afluents amb el mateix ordre, ja que el que els diferencia és l’id del corrent d’aigua principal (<strong>cauce_principal_id</strong>). Tots els afluents d’una llera contenen el mateix nom al camp <strong>cauce_nombre_phi</strong> i <strong>cauce_rotulo_phi</strong>, de manera que amb aquests camps podem vincular la llera principal amb els seus afluents.</p>
 <ul>
@@ -227,12 +230,12 @@ gra::after, jct::after, note::after, todo::after, maa:after {
 <h2 class="anchored" data-anchor-id="resum-de-les-dades">Resum de les dades</h2>
 <p>De manera senzilla, podem trobar la mitjana, la desviació típica i la variància dels dos tipus de longitud.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>n       <span class="ot">=</span> <span class="fu">nrow</span>(rius)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>conques <span class="ot">=</span> <span class="fu">length</span>(<span class="fu">table</span>(rius<span class="sc">$</span>cuenca_principal_id))</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>x2      <span class="ot">=</span> <span class="fu">mean</span>(rius<span class="sc">$</span>cauce_longitud_2d)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>x3      <span class="ot">=</span> <span class="fu">mean</span>(rius<span class="sc">$</span>cauce_longitud_3d)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>sd2_2d  <span class="ot">=</span> <span class="fu">var</span>(rius<span class="sc">$</span>cauce_longitud_2d)<span class="sc">*</span>(n<span class="dv">-1</span>)<span class="sc">/</span>n</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>sd2_3d  <span class="ot">=</span> <span class="fu">var</span>(rius<span class="sc">$</span>cauce_longitud_3d)<span class="sc">*</span>(n<span class="dv">-1</span>)<span class="sc">/</span>n</span>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>n       <span class="ot">=</span> <span class="fu">nrow</span>(torrents)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>conques <span class="ot">=</span> <span class="fu">length</span>(<span class="fu">table</span>(torrents<span class="sc">$</span>cuenca_principal_id))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>x2      <span class="ot">=</span> <span class="fu">mean</span>(torrents<span class="sc">$</span>cauce_longitud_2d)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>x3      <span class="ot">=</span> <span class="fu">mean</span>(torrents<span class="sc">$</span>cauce_longitud_3d)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>sd2_2d  <span class="ot">=</span> <span class="fu">var</span>(torrents<span class="sc">$</span>cauce_longitud_2d)<span class="sc">*</span>(n<span class="dv">-1</span>)<span class="sc">/</span>n</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>sd2_3d  <span class="ot">=</span> <span class="fu">var</span>(torrents<span class="sc">$</span>cauce_longitud_3d)<span class="sc">*</span>(n<span class="dv">-1</span>)<span class="sc">/</span>n</span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>sd_2d   <span class="ot">=</span> <span class="fu">sqrt</span>(sd2_2d)</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>sd_3d   <span class="ot">=</span> <span class="fu">sqrt</span>(sd2_3d)</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
@@ -240,10 +243,10 @@ gra::after, jct::after, note::after, todo::after, maa:after {
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(resum) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"2d"</span>, <span class="st">"3d"</span>)</span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(resum) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Mitjana"</span>, <span class="st">"Variança"</span>, <span class="st">"Desviació típica"</span>)</span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"Nombre de rius:    %d</span><span class="sc">\n</span><span class="st">Nombre de conques: %d"</span>, n, conques))</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"Nombre de torrents: %d</span><span class="sc">\n</span><span class="st">Nombre de conques:  %d"</span>, n, conques))</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Nombre de rius:    5497
-Nombre de conques: 489</code></pre>
+<pre><code>Nombre de torrents: 5497
+Nombre de conques:  489</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>resum</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -258,8 +261,9 @@ Desviació típica    2023.422    2076.161</code></pre>
 <h2 class="anchored" data-anchor-id="longituds-en-2d-i-en-3d">Longituds en 2d i en 3d</h2>
 <p>Mostrem la distribució de les longituds en metres en 2d i en 3d superposades en un mateix gràfic.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(rius<span class="sc">$</span>cauce_longitud_2d), <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">main=</span><span class="st">"Longitud de les lleres"</span>, <span class="at">xlab=</span><span class="st">"Longitud (m)"</span>, <span class="at">ylab=</span><span class="st">"Densitat"</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(rius<span class="sc">$</span>cauce_longitud_3d), <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(torrents<span class="sc">$</span>cauce_longitud_2d), <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">main=</span><span class="st">"Longitud de les lleres"</span>, <span class="at">xlab=</span><span class="st">"Longitud (m)"</span>, <span class="at">ylab=</span><span class="st">"Densitat"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(torrents<span class="sc">$</span>cauce_longitud_3d), <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"2d"</span>, <span class="st">"3d"</span>), <span class="at">col=</span> <span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"red"</span>),<span class="at">lty =</span> <span class="dv">1</span>)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -270,12 +274,13 @@ Desviació típica    2023.422    2076.161</code></pre>
 </div>
 <p>Com que hi ha molt pocs torrents que arribin al quilòmetre de llargària, visualitzarem millor la densitat si ens restringim a aquestes lleres.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sprintf</span>(<span class="st">"Rius de menys d'1km (en 2d): %g"</span>, <span class="fu">sum</span>(rius<span class="sc">$</span>cauce_longitud_2d <span class="sc">&lt;</span> <span class="dv">1000</span>))</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sprintf</span>(<span class="st">"Torrents de menys d'1km (en 2d): %g"</span>, <span class="fu">sum</span>(torrents<span class="sc">$</span>cauce_longitud_2d <span class="sc">&lt;</span> <span class="dv">1000</span>))</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "Rius de menys d'1km (en 2d): 4244"</code></pre>
+<pre><code>[1] "Torrents de menys d'1km (en 2d): 4244"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(rius<span class="sc">$</span>cauce_longitud_2d), <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">main=</span><span class="st">"Longitud de les lleres"</span>, <span class="at">xlab=</span><span class="st">"Longitud (m)"</span>, <span class="at">ylab=</span><span class="st">"Densitat"</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1000</span>))</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(rius<span class="sc">$</span>cauce_longitud_3d), <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(torrents<span class="sc">$</span>cauce_longitud_2d), <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">main=</span><span class="st">"Longitud de les lleres"</span>, <span class="at">xlab=</span><span class="st">"Longitud (m)"</span>, <span class="at">ylab=</span><span class="st">"Densitat"</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1000</span>))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">density</span>(torrents<span class="sc">$</span>cauce_longitud_3d), <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"2d"</span>, <span class="st">"3d"</span>), <span class="at">col=</span> <span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"red"</span>),<span class="at">lty =</span> <span class="dv">1</span>)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -285,12 +290,11 @@ Desviació típica    2023.422    2076.161</code></pre>
 </div>
 </div>
 <p>Una altra classificació que pot interessar-nos és segons els nivells d’importància de les lleres. Podríem plantejar si els tipus de longitud s’avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació.</p>
-<p><gra>He llevat ses etiquetes des eixos, amb tants de gràfics crec que no fa falta; a més són gràfics de densitats</gra></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">max</span>(rius<span class="sc">$</span>cauce_nivel)) {</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">density</span>(<span class="fu">subset</span>(rius, cauce_nivel<span class="sc">==</span>i)<span class="sc">$</span>cauce_longitud_2d), <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"Longitud"</span>,<span class="st">"nivell"</span>,i), <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">""</span>)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lines</span>(<span class="fu">density</span>(<span class="fu">subset</span>(rius, cauce_nivel<span class="sc">==</span>i)<span class="sc">$</span>cauce_longitud_3d), <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">max</span>(torrents<span class="sc">$</span>cauce_nivel)) {</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">density</span>(<span class="fu">subset</span>(torrents, cauce_nivel<span class="sc">==</span>i)<span class="sc">$</span>cauce_longitud_2d), <span class="at">col =</span> <span class="st">"blue"</span>, <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"Longitud"</span>,<span class="st">"nivell"</span>,i), <span class="at">xlab=</span><span class="st">""</span>, <span class="at">ylab=</span><span class="st">""</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lines</span>(<span class="fu">density</span>(<span class="fu">subset</span>(torrents, cauce_nivel<span class="sc">==</span>i)<span class="sc">$</span>cauce_longitud_3d), <span class="at">col =</span> <span class="st">"red"</span>)</span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">legend</span>(<span class="st">"topright"</span>, <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"2d"</span>, <span class="st">"3d"</span>), <span class="at">col=</span> <span class="fu">c</span>(<span class="st">"blue"</span>, <span class="st">"red"</span>),<span class="at">lty =</span> <span class="dv">1</span>)</span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -334,10 +338,10 @@ Desviació típica    2023.422    2076.161</code></pre>
 <h2 class="anchored" data-anchor-id="longituds-2d-i-3d-relatives">Longituds 2d i 3d relatives</h2>
 <p>Vinculant els gràfics anteriors a la pregunta proposada, podem considerar la diferència relativa entre les longituds en cada llera, i visualitzar les densitats d’aquestes diferències per a cada nivell.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>rius<span class="sc">$</span>diferencia <span class="ot">=</span> (rius<span class="sc">$</span>cauce_longitud_3d <span class="sc">-</span> rius<span class="sc">$</span>cauce_longitud_2d)<span class="sc">/</span>rius<span class="sc">$</span>cauce_longitud_3d</span>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>torrents<span class="sc">$</span>diferencia <span class="ot">=</span> (torrents<span class="sc">$</span>cauce_longitud_3d <span class="sc">-</span> torrents<span class="sc">$</span>cauce_longitud_2d)<span class="sc">/</span>torrents<span class="sc">$</span>cauce_longitud_3d</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">max</span>(rius<span class="sc">$</span>cauce_nivel)) {</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">density</span>(<span class="fu">subset</span>(rius, cauce_nivel <span class="sc">==</span> i)<span class="sc">$</span>diferencia), <span class="at">col =</span> <span class="st">"grey"</span>, <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"Diferència relativa nivell"</span>,i), <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.5</span>), <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">max</span>(torrents<span class="sc">$</span>cauce_nivel)) {</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="fu">density</span>(<span class="fu">subset</span>(torrents, cauce_nivel <span class="sc">==</span> i)<span class="sc">$</span>diferencia), <span class="at">col =</span> <span class="st">"grey"</span>, <span class="at">main =</span> <span class="fu">paste</span>(<span class="st">"Diferència relativa nivell"</span>,i), <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fl">0.5</span>), <span class="at">xlab =</span> <span class="st">""</span>, <span class="at">ylab =</span> <span class="st">""</span>)</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
@@ -375,22 +379,29 @@ Desviació típica    2023.422    2076.161</code></pre>
 </div>
 </div>
 </div>
-<p>Podem fer-nos una idea de si la diferència entre les longituds 2d i 3d registrades és consistent. A partir de les conques principals, considerem l’acumulat de les longituds 2d i 3d de les lleres que hi desemboquen, i visualitzem l’error relatiu (això és <span class="math inline">\(\frac{long\_3d - long\_2d}{long\_3d}\)</span>) entre dits valors. Entendrem per conques principals aquelles en què hi ha un major nombre de lleres que hi finalitzen.</p>
+<p>Podem fer-nos una idea de si la diferència entre les longituds 2d i 3d registrades és consistent. A partir de les conques principals, considerem l’acumulat de les longituds 2d i 3d de les lleres que hi ha a cada conca. A continuació, donam un gràfic amb les longituds acumulades 2d i 3d una devora l’altra i visualitzem l’error relatiu adalt (això és <span class="math inline">\(\frac{long\_3d - long\_2d}{long\_3d}\)</span>) entre dits valors. Entendrem per conques principals aquelles en què hi ha un major nombre de lleres que hi ha.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Agrupam per nombre de conca, i acumulam valors de longituds</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>df_2 <span class="ot">&lt;-</span> rius <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>df_2 <span class="ot">&lt;-</span> torrents <span class="sc">%&gt;%</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(cuenca_principal_id) <span class="sc">%&gt;%</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">cauce_longitud_2d =</span> <span class="fu">sum</span>(cauce_longitud_2d), <span class="at">cauce_longitud_3d =</span> <span class="fu">sum</span>(cauce_longitud_3d), <span class="at">count =</span> <span class="fu">n</span>())</span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Ens quedam amb les 5 conques amb més lleres</span></span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>df_2 <span class="ot">=</span> df_2[<span class="fu">order</span>(df_2<span class="sc">$</span>count,<span class="at">decreasing =</span> <span class="cn">TRUE</span>, <span class="at">na.last =</span> <span class="cn">FALSE</span>),]</span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>df_2 <span class="ot">=</span> df_2[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,]</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#Diagrama de barres de la diferència relativa al total de longitud 3d. i.e (3d-2d)/3d</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>df_2<span class="sc">$</span>dif_relativa <span class="ot">=</span> ((df_2<span class="sc">$</span>cauce_longitud_3d <span class="sc">-</span> df_2<span class="sc">$</span>cauce_longitud_2d) <span class="sc">/</span> df_2<span class="sc">$</span>cauce_longitud_3d)</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(df_2<span class="sc">$</span>dif_relativa, <span class="at">beside =</span> <span class="cn">TRUE</span>, <span class="at">names.arg =</span> df_2<span class="sc">$</span>cuenca_principal_id,</span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">'id Conca'</span>, <span class="at">ylab =</span> <span class="st">'Error relatiu'</span>,<span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fu">max</span>(df_2<span class="sc">$</span>dif_relativa)<span class="sc">+</span><span class="fl">0.01</span>),</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">'Diferència relativa de longituds acumulades'</span>)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>df_2<span class="sc">$</span>dif_relativa <span class="ot">=</span> ((df_2<span class="sc">$</span>cauce_longitud_3d <span class="sc">-</span> df_2<span class="sc">$</span>cauce_longitud_2d) <span class="sc">/</span> df_2<span class="sc">$</span>cauce_longitud_3d)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a matrix of the two columns to plot</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>values <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(df_2[, <span class="fu">c</span>(<span class="st">'cauce_longitud_2d'</span>, <span class="st">'cauce_longitud_3d'</span>)])</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the barplot</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>b<span class="ot">=</span><span class="fu">barplot</span>(<span class="fu">t</span>(values), <span class="at">beside =</span> <span class="cn">TRUE</span>, <span class="at">names.arg =</span> df_2<span class="sc">$</span>cuenca_principal_id, <span class="at">col =</span> <span class="fu">c</span>(<span class="st">'blue'</span>, <span class="st">'red'</span>),</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">'Long 2d'</span>, <span class="st">'Long 3d'</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fu">max</span>(values)<span class="sc">+</span><span class="dv">50000</span>), <span class="at">xlab =</span> <span class="st">'id Conca'</span>, <span class="at">ylab =</span> <span class="st">'Acumulat'</span>, </span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">'Longituds acumulades per conques + error relatiu'</span>)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df_2)) {</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>  middle_pos <span class="ot">&lt;-</span> <span class="fu">mean</span>(b[, i])  <span class="co"># Get the middle position of the pair of bars</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  max_height <span class="ot">&lt;-</span> <span class="fu">max</span>(values[i, ])  <span class="co"># Find the maximum height of the pair of bars to place the label above</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="at">x =</span> middle_pos, <span class="at">y =</span> max_height <span class="sc">+</span> <span class="dv">15000</span>, <span class="at">label =</span> <span class="fu">round</span>(df_2<span class="sc">$</span>dif_relativa[i], <span class="at">digits =</span> <span class="dv">3</span>), <span class="at">cex =</span> <span class="fl">0.8</span>)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -399,21 +410,21 @@ Desviació típica    2023.422    2076.161</code></pre>
 </div>
 </div>
 </div>
-<p><jct>Havia fet tb aquest gràfic, però amb so ser valors tan diferents entre conques quasi no s’aprecien bé ses diferències. Ho podem llevar, no?</jct></p>
-<p><gra>Que te pareix si mos quedam amb so de baix i posam adalt de cada barra s’error relatiu?</gra></p>
+<p>Un altre fet que pot resultar rellevant és identificar les lleres que tenen més afluents. Podem mostrar en un diagrama de barres les 10 més nombroses.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a matrix of the two columns to plot</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>values <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(df_2[, <span class="fu">c</span>(<span class="st">'cauce_longitud_2d'</span>, <span class="st">'cauce_longitud_3d'</span>)])</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the barplot</span></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>b<span class="ot">=</span><span class="fu">barplot</span>(<span class="fu">t</span>(values), <span class="at">beside =</span> <span class="cn">TRUE</span>, <span class="at">names.arg =</span> df_2<span class="sc">$</span>cuenca_principal_id, <span class="at">col =</span> <span class="fu">c</span>(<span class="st">'blue'</span>, <span class="st">'red'</span>),</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">'Long 2d'</span>, <span class="st">'Long 3d'</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="fu">max</span>(values)<span class="sc">+</span><span class="dv">50000</span>), <span class="at">xlab =</span> <span class="st">'id Conca'</span>, <span class="at">ylab =</span> <span class="st">'Acumulat'</span>, </span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">'Longituds acumulades per conques + error relatiu'</span>)</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(df_2)) {</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  middle_pos <span class="ot">&lt;-</span> <span class="fu">mean</span>(b[, i])  <span class="co"># Get the middle position of the pair of bars</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  max_height <span class="ot">&lt;-</span> <span class="fu">max</span>(values[i, ])  <span class="co"># Find the maximum height of the pair of bars to place the label above</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">text</span>(<span class="at">x =</span> middle_pos, <span class="at">y =</span> max_height <span class="sc">+</span> <span class="dv">15000</span>, <span class="at">label =</span> <span class="fu">round</span>(df_2<span class="sc">$</span>dif_relativa[i], <span class="at">digits =</span> <span class="dv">3</span>), <span class="at">cex =</span> <span class="fl">0.8</span>)</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Agrupam segons el nom de la llera principal</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>df_3 <span class="ot">&lt;-</span> torrents <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(cauce_rotulo_phi) <span class="sc">%&gt;%</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n</span>())</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Eliminam aquelles lleres que no tenen nom (que sempre són lleres principals i no tenen afluents), i ens quedam amb els 10 que en tenen més</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>df_3 <span class="ot">=</span> df_3[<span class="fu">order</span>(df_3<span class="sc">$</span>count,<span class="at">decreasing =</span> <span class="cn">TRUE</span>, <span class="at">na.last =</span> <span class="cn">FALSE</span>),]</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>df_3 <span class="ot">=</span> df_3[<span class="dv">2</span><span class="sc">:</span><span class="dv">10</span>,]</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Ho mostram en un gràfic</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">13</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>bp <span class="ot">=</span> <span class="fu">barplot</span>(df_3<span class="sc">$</span>count, <span class="at">beside =</span> <span class="cn">TRUE</span>, <span class="at">names.arg =</span> df_3<span class="sc">$</span>cauce_rotulo_phi, <span class="at">las =</span> <span class="dv">2</span>, <span class="at">ylab =</span> <span class="st">'Afluents'</span>,</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">'Lleres amb més afluents'</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fu">max</span>(df_3<span class="sc">$</span>count)<span class="sc">+</span><span class="dv">25</span>))</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(bp, df_3<span class="sc">$</span>count, df_3<span class="sc">$</span>count, <span class="at">pos =</span> <span class="dv">3</span>, <span class="at">xpd =</span> <span class="cn">NA</span>)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -422,24 +433,11 @@ Desviació típica    2023.422    2076.161</code></pre>
 </div>
 </div>
 </div>
-</section>
-<section id="recomptes" class="level2">
-<h2 class="anchored" data-anchor-id="recomptes">Recomptes</h2>
-<p>Una informació que pot resultar rellevant és identificar les lleres que tenen més afluents. Podem mostrar en un diagrama de barres les 10 més nombroses.</p>
+<p>També pot ser d’interès saber quants de torrents hi ha per cada nivell.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Agrupam segons el nom de la llera principal</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>df_3 <span class="ot">&lt;-</span> rius <span class="sc">%&gt;%</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(cauce_rotulo_phi) <span class="sc">%&gt;%</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n</span>())</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">#Eliminam aquelles lleres que no tenen nom (que sempre són lleres principals i no tenen afluents), i ens quedam amb els 10 que en tenen més</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>df_3 <span class="ot">=</span> df_3[<span class="fu">order</span>(df_3<span class="sc">$</span>count,<span class="at">decreasing =</span> <span class="cn">TRUE</span>, <span class="at">na.last =</span> <span class="cn">FALSE</span>),]</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>df_3 <span class="ot">=</span> df_3[<span class="dv">2</span><span class="sc">:</span><span class="dv">10</span>,]</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Ho mostram en un gràfic</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">13</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">2</span>))</span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>bp <span class="ot">=</span> <span class="fu">barplot</span>(df_3<span class="sc">$</span>count, <span class="at">beside =</span> <span class="cn">TRUE</span>, <span class="at">names.arg =</span> df_3<span class="sc">$</span>cauce_rotulo_phi, <span class="at">las =</span> <span class="dv">2</span>, <span class="at">ylab =</span> <span class="st">'Afluents'</span>,</span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">main =</span> <span class="st">'Lleres amb més afluents'</span>, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fu">max</span>(df_3<span class="sc">$</span>count)<span class="sc">+</span><span class="dv">25</span>))</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(bp, df_3<span class="sc">$</span>count, df_3<span class="sc">$</span>count, <span class="at">pos =</span> <span class="dv">3</span>, <span class="at">xpd =</span> <span class="cn">NA</span>)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>nivells <span class="ot">=</span> <span class="fu">as.matrix</span>(<span class="fu">count</span>(torrents, cauce_nivel)[<span class="dv">2</span>])</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>bp <span class="ot">=</span> <span class="fu">barplot</span>(nivells, <span class="at">beside =</span> T, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fu">max</span>(nivells) <span class="sc">+</span> <span class="dv">100</span>), <span class="at">space=</span><span class="fl">0.1</span>, <span class="at">xlab=</span><span class="st">"Nivell"</span>, <span class="at">ylab=</span><span class="st">"# Torrents"</span>, <span class="at">names=</span><span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>), <span class="at">main =</span> <span class="st">"Nombre de lleres de cada nivell"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(bp, nivells <span class="sc">+</span> <span class="dv">50</span>, nivells)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -448,32 +446,19 @@ Desviació típica    2023.422    2076.161</code></pre>
 </div>
 </div>
 </div>
-<p>També pot ser d’interès sabre quants de rius hi ha per cada nivell.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>nivells <span class="ot">=</span> <span class="fu">as.matrix</span>(<span class="fu">count</span>(rius, cauce_nivel)[<span class="dv">2</span>])</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>bp <span class="ot">=</span> <span class="fu">barplot</span>(nivells, <span class="at">beside =</span> T, <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="fu">max</span>(nivells) <span class="sc">+</span> <span class="dv">100</span>), <span class="at">space=</span><span class="fl">0.1</span>, <span class="at">xlab=</span><span class="st">"Nivell"</span>, <span class="at">ylab=</span><span class="st">"# Rius"</span>, <span class="at">names=</span><span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>), <span class="at">main =</span> <span class="st">"Nombre de lleres de cada nivell"</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(bp, nivells <span class="sc">+</span> <span class="dv">50</span>, nivells)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="tenerife_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
 <p>Per seguir comparant el dos tipus de longituts, el que farem serà agafarles 5 lleres amb més afluents, i veure la relació d’aquestes dues longituts.</p>
 <p><jct>Alerta, aquí estas fent conques, no lleres. Per sabre ses lleres amb més afluents has de mirar es camp cauce_nombre_phi (mira adalt on descriven ses variables, he afegit un paràgraf on s’explia. He comprovat amb es document aquell des noms i classificació i sí que quadra)</jct></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>freqüències <span class="ot">=</span> <span class="fu">table</span>(rius<span class="sc">$</span>cuenca_principal_id)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>freqüències_ordenades <span class="ot">=</span> <span class="fu">sort</span>(freqüències,<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>top_5_rius <span class="ot">=</span> <span class="fu">head</span>(freqüències_ordenades,<span class="dv">5</span>)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>top_5_rius <span class="co">#Aquests són els idprincipals dels rius amb més afluents.</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>freqüències <span class="ot">=</span> <span class="fu">table</span>(torrents<span class="sc">$</span>cuenca_principal_id)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>freqüències_ordenades <span class="ot">=</span> <span class="fu">sort</span>(freqüències,<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>top_5_torrents <span class="ot">=</span> <span class="fu">head</span>(freqüències_ordenades,<span class="dv">5</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>top_5_torrents <span class="co">#Aquests són els idprincipals dels torrents amb més afluents.</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 275   8 367   9 409 
 225 157 157 149 131 </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>suma_long2d <span class="ot">=</span> <span class="dv">0</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>suma_long2d <span class="ot">=</span> <span class="dv">0</span></span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -515,18 +500,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -558,7 +532,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -566,7 +562,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
