@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ca" xml:lang="ca"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.5.45">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -34,7 +34,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -69,7 +69,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="tenerife_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="tenerife_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -115,15 +115,9 @@ window.Quarto = {
   <li><a href="#càrrega-de-dades" id="toc-càrrega-de-dades" class="nav-link" data-scroll-target="#càrrega-de-dades">Càrrega de dades</a></li>
   <li><a href="#resum-de-les-dades" id="toc-resum-de-les-dades" class="nav-link" data-scroll-target="#resum-de-les-dades">Resum de les dades</a></li>
   <li><a href="#longituds-en-2d-i-en-3d" id="toc-longituds-en-2d-i-en-3d" class="nav-link" data-scroll-target="#longituds-en-2d-i-en-3d">Longituds en 2d i en 3d</a></li>
-  </ul></li>
-  <li><a href="#he-llevat-ses-etiquetes-des-eixos-amb-tants-de-gràfics-crec-que-no-fa-falta-a-més-són-gràfics-de-densitats" id="toc-he-llevat-ses-etiquetes-des-eixos-amb-tants-de-gràfics-crec-que-no-fa-falta-a-més-són-gràfics-de-densitats" class="nav-link" data-scroll-target="#he-llevat-ses-etiquetes-des-eixos-amb-tants-de-gràfics-crec-que-no-fa-falta-a-més-són-gràfics-de-densitats"><gra>He llevat ses etiquetes des eixos, amb tants de gràfics crec que no fa falta; a més són gràfics de densitats</gra></a>
-  <ul class="collapse">
   <li><a href="#longituds-2d-i-3d-relatives" id="toc-longituds-2d-i-3d-relatives" class="nav-link" data-scroll-target="#longituds-2d-i-3d-relatives">Longituds 2d i 3d relatives</a></li>
   <li><a href="#còmput-de-lleres" id="toc-còmput-de-lleres" class="nav-link" data-scroll-target="#còmput-de-lleres">Còmput de lleres</a></li>
-  </ul></li>
-  <li><a href="#head" id="toc-head" class="nav-link" data-scroll-target="#head">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</a>
-  <ul class="collapse">
-  <li><a href="#regresió" id="toc-regresió" class="nav-link" data-scroll-target="#regresió">Regresió</a></li>
+  <li><a href="#regressió" id="toc-regressió" class="nav-link" data-scroll-target="#regressió">Regressió</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -192,6 +186,9 @@ gra::after, jct::after, note::after, todo::after, maa:after {
 </div>
 <section id="introducció-i-objectiu" class="level1">
 <h1>Introducció i objectiu</h1>
+<note>
+Recordau abans de seguir treballant fer <code>PULL</code>!! (i comprovar si hem penjat res també abans des push) Per evitar conflictes i branques
+</note>
 <p>El conjunt de dades escollit, <a href="https://datos.gob.es/es/catalogo/a05003638-cauces-de-la-isla-de-tenerife">Cauces de la isla de Tenerife</a> (concretament, l’<em>inventario insular de cauces de Tenerife</em>), conté informació geogràfica sobre la classificació i nomenclatura de les lleres de Tenerife, així com la seva longitud i la conca a la qual hi pertanyen. Va ser actualitzada per darrera vegada el 31/08 d’aquest any.</p>
 <p>Les dades referents a la longitud de les dades apareix calculada sobre mapes 2d i sobre models 3d de l’illa. Així, posterior a l’anàlisi exploratòria de les dades podríem plantejar la pregunta de si els dos tipus de longituds registrats segueixen la mateixa distribució, en el sentit de si la raó entre la longitud 3d i la 2d és la mateixa.</p>
 </section>
@@ -229,7 +226,7 @@ gra::after, jct::after, note::after, todo::after, maa:after {
 <ul>
 <li><p><strong>cauce_longitud_2d</strong>: de tipus quantitatiu continu, és la mesura de la longitud de la llera en metres si fos mesurat sobre un mapa.</p></li>
 <li><p><strong>cauce_longitud_3d</strong>: de tipus quantitatiu continu, és la mesura de la longitud real de la llera en metres tenint en compte l’altitud (mesurat sobre un model digital del terreny).</p></li>
-<li><p><strong>cuenca_principal_id</strong>: de tipus qualitatiu, és un identificador de les conques de l’illa. Totes les lleres que desenboquen en una mateixa conca formen una xarxa.</p></li>
+<li><p><strong>cuenca_principal_id</strong>: de tipus qualitatiu, és un identificador de les conques de l’illa. Totes les lleres que són d’una mateixa conca formen una xarxa.</p></li>
 <li><p><strong>cauce_nombre_phi</strong>: de tipus qualitatiu, és el nom de llera que consta en el PHI (Plan Hidrológico Insular)</p></li>
 <li><p><strong>cauce_rotulo_phi</strong>: de tipus qualitatiu, és el ròtul o nom que s’empra a la pràctica per etiquetar cada llera en el PHI.</p></li>
 </ul>
@@ -374,12 +371,8 @@ Desviació típica    2023.422    2076.161</code></pre>
 </div>
 </div>
 </div>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD Una altra classificació que pot interessar-nos és segons els nivells d’importància de les lleres. Podríem plantejar si els tipus de longitud s’avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació.</p>
-</section>
-</section>
-<section id="he-llevat-ses-etiquetes-des-eixos-amb-tants-de-gràfics-crec-que-no-fa-falta-a-més-són-gràfics-de-densitats" class="level1">
-<h1><gra>He llevat ses etiquetes des eixos, amb tants de gràfics crec que no fa falta; a més són gràfics de densitats</gra></h1>
-<p>Una altra classificació que pot interessar-nos és segons els nivells d’importància de les lleres. Podríem plantejar si els tipus de longitud s’avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació. &gt;&gt;&gt;&gt;&gt;&gt;&gt; 534684a550aab82239410eeb8864c002e7dec7ed</p>
+<p>Una altra classificació que pot interessar-nos és segons els nivells d’importància de les lleres. Podríem plantejar si els tipus de longitud s’avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació.</p>
+<p>Una altra classificació que pot interessar-nos és segons els nivells d’importància de les lleres. Podríem plantejar si els tipus de longitud s’avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">max</span>(torrents<span class="sc">$</span>cauce_nivel)) {</span>
@@ -423,7 +416,7 @@ Desviació típica    2023.422    2076.161</code></pre>
 </div>
 </div>
 </div>
-<p>======= &gt;&gt;&gt;&gt;&gt;&gt;&gt; 3a2938773f67761739c67b43f0aa62845c7aa312</p>
+</section>
 <section id="longituds-2d-i-3d-relatives" class="level2">
 <h2 class="anchored" data-anchor-id="longituds-2d-i-3d-relatives">Longituds 2d i 3d relatives</h2>
 <p>Vinculant els gràfics anteriors a la pregunta proposada, podem considerar la diferència relativa entre les longituds en cada llera (això és <span class="math inline">\(\frac{long\_3d - long\_2d}{long\_3d}\)</span>), i visualitzar les densitats d’aquestes diferències per a cada nivell.</p>
@@ -502,7 +495,7 @@ Desviació típica    2023.422    2076.161</code></pre>
 </section>
 <section id="còmput-de-lleres" class="level2">
 <h2 class="anchored" data-anchor-id="còmput-de-lleres">Còmput de lleres</h2>
-<p>Un altre fet que pot resultar rellevant és comptabilitzar els tipus de lleres segons distintes clasificacions. Per exemple, podem identificar les lleres que tenen més afluents.Mostrem en un diagrama de barres les 10 més nombroses.</p>
+<p>Un altre fet que pot resultar rellevant és comptabilitzar els tipus de lleres segons distintes classificacions. Per exemple, podem identificar les lleres que tenen més afluents.Mostrem en un diagrama de barres les 10 més nombroses.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Agrupam segons el nom de la llera principal</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>df_3 <span class="ot">&lt;-</span> torrents <span class="sc">%&gt;%</span></span>
@@ -538,35 +531,12 @@ Desviació típica    2023.422    2076.161</code></pre>
 </div>
 </div>
 </div>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</p>
 </section>
-</section>
-<section id="head" class="level1">
-<h1>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</h1>
-<blockquote class="blockquote">
-<blockquote class="blockquote">
-<blockquote class="blockquote">
-<blockquote class="blockquote">
-<blockquote class="blockquote">
-<blockquote class="blockquote">
-<blockquote class="blockquote">
-<p>534684a550aab82239410eeb8864c002e7dec7ed</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-<section id="regresió" class="level2">
-<h2 class="anchored" data-anchor-id="regresió">Regresió</h2>
-<p>Calcularem la recta de regresió on la variable independent sirà la longitud en 2d, i la variable dependent, sirà la longitud en 3 dimensions de la suma dels afluents.</p>
+<section id="regressió" class="level2">
+<h2 class="anchored" data-anchor-id="regressió">Regressió</h2>
+<p><gra>Ara que ho pens sa regressió lineal no és inferència?</gra></p>
+<p>Calcularem la recta de regressió on la variable independent sirà la longitud en 2d, i la variable dependent, sirà la longitud en 3 dimensions de la suma dels afluents.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>longituts_2d<span class="ot">=</span>torrents<span class="sc">$</span>cauce_longitud_2d</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>longituts_3d<span class="ot">=</span>torrents<span class="sc">$</span>cauce_longitud_3d</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustam el modelo de regresió lineal</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(longituts_3d <span class="sc">~</span> longituts_2d)</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(longituts_3d<span class="sc">~</span>longituts_2d, <span class="at">main =</span> <span class="st">"Recta de Regresión Lineal"</span>, <span class="at">xlab =</span> <span class="st">"Longitud 2d"</span>, <span class="at">ylab =</span> <span class="st">"longitud 3d"</span>,<span class="at">col=</span><span class="st">"blue"</span>, <span class="at">pch =</span> <span class="dv">19</span>)<span class="sc">+</span><span class="fu">abline</span>(model, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -578,8 +548,8 @@ Desviació típica    2023.422    2076.161</code></pre>
 <pre><code>integer(0)</code></pre>
 </div>
 </div>
-<p>Podem observar que les variables cauce_longitud_2d i cauce_longitud_3d estan molt ben ajustades per aquest model de regressió lineal.</p>
-<p>======= &gt;&gt;&gt;&gt;&gt;&gt;&gt; 3a2938773f67761739c67b43f0aa62845c7aa312</p>
+<p><gra>Se pot llevar això de <code>integer(0)</code>?</gra></p>
+<p>Podem observar que les variables <em>cauce_longitud_2d</em> i <em>cauce_longitud_3d</em> estan molt ben ajustades per aquest model de regressió lineal.</p>
 </section>
 </section>
 
@@ -620,18 +590,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -663,7 +622,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp('/' + window.location.host + '/');
@@ -671,7 +652,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {

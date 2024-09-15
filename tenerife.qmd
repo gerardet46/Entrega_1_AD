@@ -51,6 +51,8 @@ library(ggplot2)
 
 # Introducció i objectiu
 
+<note>Recordau abans de seguir treballant fer `PULL`!! (i comprovar si hem penjat res també abans des push) Per evitar conflictes i branques</note>
+
 El conjunt de dades escollit, [Cauces de la isla de Tenerife](https://datos.gob.es/es/catalogo/a05003638-cauces-de-la-isla-de-tenerife) (concretament, l'*inventario insular de cauces de Tenerife*), conté informació geogràfica sobre la classificació i nomenclatura de les lleres de Tenerife, així com la seva longitud i la conca a la qual hi pertanyen. Va ser actualitzada per darrera vegada el 31/08 d'aquest any.
 
 Les dades referents a la longitud de les dades apareix calculada sobre mapes 2d i sobre models 3d de l'illa. Així, posterior a l'anàlisi exploratòria de les dades podríem plantejar la pregunta de si els dos tipus de longituds registrats segueixen la mateixa distribució, en el sentit de si la raó entre la longitud 3d i la 2d és la mateixa.
@@ -84,7 +86,7 @@ Per exemple, si una llera té nivell 1 vol dir que és un dels torrents principa
 
 -   **cauce_longitud_3d**: de tipus quantitatiu continu, és la mesura de la longitud real de la llera en metres tenint en compte l'altitud (mesurat sobre un model digital del terreny).
 
--   **cuenca_principal_id**: de tipus qualitatiu, és un identificador de les conques de l'illa. Totes les lleres que desenboquen en una mateixa conca formen una xarxa.
+-   **cuenca_principal_id**: de tipus qualitatiu, és un identificador de les conques de l'illa. Totes les lleres que són d'una mateixa conca formen una xarxa.
 
 -   **cauce_nombre_phi**: de tipus qualitatiu, és el nom de llera que consta en el PHI (Plan Hidrológico Insular)
 
@@ -169,14 +171,9 @@ ggplot(datos_largo, aes(x = x, y = Longituds, fill = Tipus)) +
   theme_minimal()
 
 ```
-<<<<<<< HEAD
-<<<<<<< HEAD
 Una altra classificació que pot interessar-nos és segons els nivells d'importància de les lleres. Podríem plantejar si els tipus de longitud s'avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació. 
 
-<gra>He llevat ses etiquetes des eixos, amb tants de gràfics crec que no fa falta; a més són gràfics de densitats</gra>
-=======
 Una altra classificació que pot interessar-nos és segons els nivells d'importància de les lleres. Podríem plantejar si els tipus de longitud s'avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació.
->>>>>>> 534684a550aab82239410eeb8864c002e7dec7ed
 
 ```{r}
 par(mfrow = c(1, 2))
@@ -186,9 +183,6 @@ for(i in 1:max(torrents$cauce_nivel)) {
   legend("topright", legend = c("2d", "3d"), col= c("blue", "red"),lty = 1)
 }
 ```
-
-=======
->>>>>>> 3a2938773f67761739c67b43f0aa62845c7aa312
 
 
 ## Longituds 2d i 3d relatives
@@ -228,7 +222,7 @@ for (i in 1:nrow(df_2)) {
 }
 ```
 ## Còmput de lleres
-Un altre fet que pot resultar rellevant és comptabilitzar els tipus de lleres segons distintes clasificacions. Per exemple, podem identificar les lleres que tenen més afluents.Mostrem en un diagrama de barres les 10 més nombroses.
+Un altre fet que pot resultar rellevant és comptabilitzar els tipus de lleres segons distintes classificacions. Per exemple, podem identificar les lleres que tenen més afluents.Mostrem en un diagrama de barres les 10 més nombroses.
 
 ```{r}
 #Agrupam segons el nom de la llera principal
@@ -254,26 +248,20 @@ nivells = as.matrix(count(torrents, cauce_nivel)[2])
 bp = barplot(nivells, beside = T, ylim = c(0,max(nivells) + 100), space=0.1, xlab="Nivell", ylab="# Torrents", names=seq(1:10), main = "Nombre de lleres de cada nivell")
 text(bp, nivells + 50, nivells)
 ```
-<<<<<<< HEAD
 
+## Regressió
 
-<<<<<<< HEAD
-=======
+<gra>Ara que ho pens sa regressió lineal no és inferència?</gra>
 
->>>>>>> 534684a550aab82239410eeb8864c002e7dec7ed
+Calcularem la recta de regressió on la variable independent sirà la longitud en 2d, i la variable dependent, sirà la longitud en 3 dimensions de la suma dels afluents.
 
-## Regresió
-
-Calcularem la recta de regresió on la variable independent sirà la longitud en 2d, i la variable dependent, sirà la longitud en 3 dimensions de la suma dels afluents.
-
-```{r}
+```{r echo=F}
 longituts_2d=torrents$cauce_longitud_2d
 longituts_3d=torrents$cauce_longitud_3d
-# Ajustam el modelo de regresió lineal
+# Ajustam el model de regressió lineal
 model <- lm(longituts_3d ~ longituts_2d)
-plot(longituts_3d~longituts_2d, main = "Recta de Regresión Lineal", xlab = "Longitud 2d", ylab = "longitud 3d",col="blue", pch = 19)+abline(model, col = "red", lwd = 2)
+plot(longituts_3d~longituts_2d, main = "Recta de Regressió Lineal", xlab = "Longitud 2d", ylab = "Longitud 3d",col="blue", pch = 19)+abline(model, col = "red", lwd = 2)
 ```
-Podem observar que les variables cauce_longitud_2d i cauce_longitud_3d estan molt ben ajustades per aquest model de regressió lineal.
+<gra>Se pot llevar això de `integer(0)`?</gra>
 
-=======
->>>>>>> 3a2938773f67761739c67b43f0aa62845c7aa312
+Podem observar que les variables *cauce_longitud_2d* i *cauce_longitud_3d* estan molt ben ajustades per aquest model de regressió lineal.
