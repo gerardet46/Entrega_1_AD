@@ -564,25 +564,13 @@ Desviació típica    2023.422    2076.161</code></pre>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>longituts_2d<span class="ot">=</span>torrents<span class="sc">$</span>cauce_longitud_2d</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>longituts_3d<span class="ot">=</span>torrents<span class="sc">$</span>cauce_longitud_3d</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(longituts_2d,longituts_3d,<span class="at">main =</span> <span class="st">"Diagrama de dispersión"</span>, <span class="at">xlab =</span> <span class="st">"X"</span>, <span class="at">ylab =</span> <span class="st">"Y"</span>, <span class="at">pch=</span><span class="dv">19</span>)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustam el modelo de regresió lineal</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(longituts_3d <span class="sc">~</span> longituts_2d)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(longituts_3d<span class="sc">~</span>longituts_2d, <span class="at">main =</span> <span class="st">"Recta de Regresión Lineal"</span>, <span class="at">xlab =</span> <span class="st">"Longitud 2d"</span>, <span class="at">ylab =</span> <span class="st">"longitud 3d"</span>,<span class="at">col=</span><span class="st">"blue"</span>, <span class="at">pch =</span> <span class="dv">19</span>)<span class="sc">+</span><span class="fu">abline</span>(model, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
 <p><img src="tenerife_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ajustam el modelo de regresió lineal</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(longituts_3d <span class="sc">~</span> longituts_2d)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(longituts_3d<span class="sc">~</span>longituts_2d, <span class="at">main =</span> <span class="st">"Recta de Regresión Lineal"</span>, <span class="at">xlab =</span> <span class="st">"Longitud 2d"</span>, <span class="at">ylab =</span> <span class="st">"longitud 3d"</span>,<span class="at">col=</span><span class="st">"blue"</span>, <span class="at">pch =</span> <span class="dv">19</span>,<span class="at">data=</span>faithful)<span class="sc">+</span><span class="fu">abline</span>(model, <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">lwd =</span> <span class="dv">2</span>,<span class="at">data=</span>faithful)</span></code><button title="Copia al porta-retalls" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in int_abline(a = a, b = b, h = h, v = v, untf = untf, ...): "data" is
-not a graphical parameter</code></pre>
-</div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="tenerife_files/figure-html/unnamed-chunk-14-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
