@@ -171,34 +171,7 @@ for(i in 1:max(rius$cauce_nivel)) {
 }
 ```
 
-Per seguir comparant el dos tipus de longituts, el que farem serà agafarles 5 lleres amb més afluents, i veure la relació d'aquestes dues longituts.
 
-```{r}
-freqüències = table(rius$cauce_nombre_phi[rius$cauce_nombre_phi!=" "])
-freqüències_ordenades = sort(freqüències,decreasing = TRUE)
-top_5_rius = head(freqüències_ordenades,5)  #Aquests són els idprincipals dels rius amb més afluents.
-valores_top_5 <- names(top_5_rius)
-suma_long2d = c(0,0,0,0,0)
-suma_long3d = c(0,0,0,0,0)
-for (i in 0:5) {
-  suma_long2d[i] = sum(rius$cauce_longitud_2d[rius$cauce_nombre_phi==valores_top_5[i]])
-}
-for (i in 0:5) {
-  suma_long3d[i] = sum(rius$cauce_longitud_3d[rius$cauce_nombre_phi==valores_top_5[i]])
-}
-x=c("1r","2n","3r","4t","5è")
-dades=data.frame(x,suma_long2d,suma_long3d)
-matriu_valors <- as.matrix(dades[, c("suma_long2d", "suma_long3d")])
-library(tidyr)
-library(ggplot2)
-datos_largo <- pivot_longer(dades, cols = suma_long3d:suma_long2d, names_to = "Tipus", values_to = "Longituts")
-ggplot(datos_largo, aes(x = x, y = Longituts, fill = Tipus)) +
-  geom_bar(stat = "identity", position = "identity", alpha = 0.6) +
-  labs(title = "Longituts de les 5 lleres amb més afluents", x = "Lleres", y = "Longituts") +
-  scale_fill_manual(values = c( "black", "skyblue")) +  # Colores para las barras
-  theme_minimal()
-
-```
 
 ## Longituds 2d i 3d relatives
 
