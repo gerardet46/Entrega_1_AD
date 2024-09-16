@@ -166,6 +166,9 @@ ggplot(datos_largo, aes(x = x, y = Longituds, fill = Tipus)) +
   scale_fill_manual(values = c( "blue", "red")) +
   theme_minimal()
 ```
+
+En aquest gràfic podem observar que, a mesura que augmenta elm nombre d'afluents, la diferència entre la longitud 2d i la longitud 3d va creixent. Llavors, això ens indica que la longitud 3d és una mica més gran que la de dues dimensions, i a mesura que augmenten el nombre d'afluents, la diferència de les longituts creix per la recurrència d'aquestes sumes
+
 Una altra classificació que pot interessar-nos és segons els nivells d'importància de les lleres. Podríem plantejar si els tipus de longitud s'avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació. 
 
 Una altra classificació que pot interessar-nos és segons els nivells d'importància de les lleres. Podríem plantejar si els tipus de longitud s'avenen millor en les lleres principals respecte a afluents. Visualitzem de nou les distribucions, però a partir dels nivells de classificació.
